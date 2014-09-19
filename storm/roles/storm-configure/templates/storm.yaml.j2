@@ -1,0 +1,8 @@
+storm.local.dir:  {{ stormdir }}
+storm.local.hostname: {{ allTags.tags.ipaddress|default('tagnotset') }}
+storm.zookeeper.servers:
+{% for item in zookeepers[env] %}
+    {{ item }}
+{% endfor %}
+nimbus.host: {{ allTags.tags.nimbushost|default('tagnotset')  }}
+storm.zookeeper.root: {{ allTags.tags.zk_root|default('tagnotset')  }}

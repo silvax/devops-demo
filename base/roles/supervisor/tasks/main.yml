@@ -1,0 +1,15 @@
+---
+# tasks file for repos
+
+- name: gather ec2 facts
+  action: ec2_facts
+
+- name: get environment tag
+  action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
+  register: allTags
+
+- pip: name=supervisor
+
+- copy: src=supervisord dest=/etc/init.d/supervisord owner=root group=root mode=0755
+
+- service: name=supervisord state=started enabled=yes

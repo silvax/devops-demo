@@ -1,0 +1,11 @@
+---
+  - hosts: localhost
+    sudo: false
+
+    roles:
+    - tag
+    - repos
+    - newrelic
+    - newrelicjava
+    - sumologic
+    - supervisor

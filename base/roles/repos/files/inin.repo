@@ -1,0 +1,184 @@
+[main]
+cachedir=/var/cache/yum
+keepcache=0
+debuglevel=2
+logfile=/var/log/yum.log
+exactarch=1
+obsoletes=1
+gpgcheck=1
+plugins=1
+installonly_limit=3
+
+# by default the yum configuration will point to the latest release
+# of Amazon Linux AMI. If you prefer not to automatically move to
+# new releases, comment out this line.
+releasever=latest
+
+#  This is the default, if you make this bigger yum won't see if the metadata
+# is newer on the remote and so you'll "gain" the bandwidth of not having to
+# download the new metadata and "pay" for it by yum not having correct
+# information.
+#  It is esp. important, to have correct metadata, for distributions like
+# Fedora which don't keep old packages around. If you don't like this checking
+# interupting your command line usage, it's much better to have something
+# manually check the metadata once an hour (yum-updatesd will do this).
+# metadata_expire=90m
+
+# PUT YOUR REPOS HERE OR IN separate files named file.repo
+# in /etc/yum.repos.d
+
+[inin_epel]
+gpgcheck=0
+name=InIn epel amzn x86_64
+baseurl=http://repo.infrastructure.inintca.com/inin_epel/6/x86_64
+includepkgs=daemonize*,rabbitmq*,erlang*,python*,django*,SOAPpy,cppunit*,zeromq*,js*,libcurl*,curl*,openpgm*
+priority=10
+
+[inin_dev]
+name=InIn dev amzn x86_64
+baseurl=http://inin-developer:crjfHtEn@purecloud.artifactoryonline.com/purecloud/inin-yum-dev
+priority=5
+enabled=0
+protect=0
+gpgcheck=0
+metadata_expire=0
+metadata_expire_filter=never
+autorefresh=1
+type=rpm-md
+username=inin-developer
+password=crjfHtEn
+
+[inin_test]
+name=InIn test amzn x86_64
+baseurl=http://inin-developer:crjfHtEn@purecloud.artifactoryonline.com/purecloud/inin-yum-test
+priority=5
+enabled=0
+protect=0
+gpgcheck=0
+metadata_expire=0
+metadata_expire_filter=never
+autorefresh=1
+type=rpm-md
+username=inin-developer
+password=crjfHtEn
+
+[inin_infra]
+name=InIn infra amzn x86_64
+baseurl=http://inin-developer:crjfHtEn@purecloud.artifactoryonline.com/purecloud/inin-yum-infra
+priority=5
+enabled=0
+protect=0
+gpgcheck=0
+metadata_expire=0
+metadata_expire_filter=never
+autorefresh=1
+type=rpm-md
+username=inin-developer
+password=crjfHtEn
+
+[inin_vagrant]
+name=InIn vagrant amzn x86_64
+baseurl=http://inin-developer:crjfHtEn@purecloud.artifactoryonline.com/purecloud/inin-yum-vagrant
+priority=5
+enabled=0
+protect=0
+gpgcheck=0
+metadata_expire=0
+metadata_expire_filter=never
+autorefresh=1
+type=rpm-md
+username=inin-developer
+password=crjfHtEn
+
+[inin_stage]
+name=InIn stage amzn x86_64
+baseurl=http://inin-developer:crjfHtEn@purecloud.artifactoryonline.com/purecloud/inin-yum-stage
+priority=5
+enabled=0
+protect=0
+gpgcheck=0
+metadata_expire=0
+metadata_expire_filter=never
+autorefresh=1
+type=rpm-md
+username=inin-developer
+password=crjfHtEn
+
+[inin_prod]
+name=InIn prod amzn x86_64
+baseurl=http://inin-developer:crjfHtEn@purecloud.artifactoryonline.com/purecloud/inin-yum-prod
+priority=5
+enabled=0
+protect=0
+gpgcheck=0
+metadata_expire=0
+metadata_expire_filter=never
+autorefresh=1
+type=rpm-md
+username=inin-developer
+password=crjfHtEn
+
+[inin_passed_dev_tests]
+name=InIn prod amzn x86_64
+baseurl=http://inin-developer:crjfHtEn@purecloud.artifactoryonline.com/purecloud/inin-yum-passed-dev-tests
+priority=5
+enabled=0
+protect=0
+gpgcheck=0
+metadata_expire=0
+metadata_expire_filter=never
+autorefresh=1
+type=rpm-md
+username=inin-developer
+password=crjfHtEn
+
+# All the puppet repos:
+
+[puppetlabs-products]
+name=Puppet Labs Products El 6 - $basearch
+baseurl=http://yum.puppetlabs.com/el/6/products/$basearch
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppetlabs
+enabled=0
+gpgcheck=0
+priority=5
+
+[puppetlabs-deps]
+name=Puppet Labs Dependencies El 6 - $basearch
+baseurl=http://yum.puppetlabs.com/el/6/dependencies/$basearch
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppetlabs
+enabled=0
+gpgcheck=0
+priority=5
+
+[puppetlabs-devel]
+name=Puppet Labs Devel El 6 - $basearch
+baseurl=http://yum.puppetlabs.com/el/6/devel/$basearch
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppetlabs
+enabled=0
+gpgcheck=0
+priority=5
+
+[puppetlabs-products-source]
+name=Puppet Labs Products El 6 - $basearch - Source
+baseurl=http://yum.puppetlabs.com/el/6/products/SRPMS
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppetlabs
+failovermethod=priority
+enabled=0
+gpgcheck=0
+priority=5
+
+[puppetlabs-deps-source]
+name=Puppet Labs Source Dependencies El 6 - $basearch - Source
+baseurl=http://yum.puppetlabs.com/el/6/dependencies/SRPMS
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppetlabs
+enabled=0
+gpgcheck=0
+priority=5
+
+[puppetlabs-devel-source]
+name=Puppet Labs Devel El 6 - $basearch - Source
+baseurl=http://yum.puppetlabs.com/el/6/devel/SRPMS
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puppetlabs
+enabled=0
+gpgcheck=0
+priority=5

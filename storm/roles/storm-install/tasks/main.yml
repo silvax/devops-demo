@@ -1,0 +1,28 @@
+---
+# tasks file for new sumo
+- name: gather ec2 facts
+  action: ec2_facts
+
+- name: get environment tag
+  action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
+  register: allTags
+
+- name: install packages
+  yum: pkg={{ item }} state=installed
+  with_items:
+   - jzmq
+   - zeromq
+   - unzip
+   - storm
+
+- file: path=/var/storm mode=1644 state=directory
+
+- file: path=/var/log/storm mode=0644 state=directory
+
+- copy: src=storm.log.properties dest=/usr/share/storm/log4j/storm.log.properties mode=0644
+
+- copy: src=logrotate dest=/etc/logrotate.d/storm mode=0644
+
+- file: src=/usr/share/storm/conf dest=/etc/storm state=link
+
+- user: name=storm

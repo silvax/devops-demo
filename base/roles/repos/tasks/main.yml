@@ -1,0 +1,26 @@
+---
+# tasks file for repos
+
+- name: gather ec2 facts
+  action: ec2_facts
+
+- name: get environment tag
+  action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
+  register: allTags
+
+- name: bootstrap inin repo install
+  copy: src=inin.repo
+        dest=/etc/yum.repos.d/
+        owner=root group=root mode=0644
+
+- name: inin repository enable
+  ini_file: dest=/etc/yum.repos.d/inin.repo
+            section=epel
+            option=enabled
+            value=1
+
+- name: inin repository enable for env
+  ini_file: dest=/etc/yum.repos.d/inin.repo
+            section=inin_{{ allTags.tags.environment | default('dev') }}
+            option=enabled
+            value=1

@@ -1,0 +1,12 @@
+[program:nimbus-ui]
+autostart=true
+command=/usr/share/storm/bin/storm ui
+user=0
+stdout_logfile=/var/log/supervisor/nimbus-ui.log
+stderr_logfile=/var/log/supervisor/nimbus-ui.err
+numprocs=1
+process_name=%(program_name)s-%(process_num)s
+startsecs=60
+environment=ENVIRONMENT={{ allTags.tags.env }}
+
+stopsignal=TERM
