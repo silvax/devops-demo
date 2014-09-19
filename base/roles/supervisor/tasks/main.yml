@@ -12,4 +12,6 @@
 
 - copy: src=supervisord dest=/etc/init.d/supervisord owner=root group=root mode=0755
 
+- copy: src=supervisord.conf dest=/etc/supervisord.conf owner=root group=root mode=0755
+
 - service: name=supervisord state=started enabled=yes
