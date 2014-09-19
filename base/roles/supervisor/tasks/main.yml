@@ -16,4 +16,6 @@
 
 - file: path=/etc/supervisor.d state=directory
 
+- file: path=/var/log/supervisor state=directory
+
 - service: name=supervisord state=started enabled=yes
