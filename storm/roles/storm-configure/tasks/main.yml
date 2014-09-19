@@ -11,4 +11,6 @@
 
 - template: src=storm.ini.j2 dest=/etc/supervisor.d/storm.ini mode=0744
 
+- service: name=supervisord state=restarted
+
 - supervisorctl: name=storm state=started
