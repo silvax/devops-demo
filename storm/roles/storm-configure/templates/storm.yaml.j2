@@ -1,7 +1,7 @@
 storm.local.dir:  {{ stormdir }}
 storm.local.hostname: {{ allTags.tags.ipaddress|default('tagnotset') }}
 storm.zookeeper.servers:
-{% for item in zookeepers[env] %}
+{% for item in zookeepers[allTags.tags.environment] %}
     {{ item }}
 {% endfor %}
 nimbus.host: {{ allTags.tags.nimbushost|default('tagnotset')  }}

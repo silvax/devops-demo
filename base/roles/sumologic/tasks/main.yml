@@ -10,8 +10,8 @@
 - name: install the latest version of sumo
   yum: name=SumoCollector state=latest
 
-- template: src=sources.json.j2 dest=/opt/SumoCollector/sources.json owner=root group=root mode=0644
-
-- template: src=sumo.conf.j2 dest=/etc/sumo.conf owner=root group=root mode=0644
-
-- service: name=newrelic-sysmond state=started
+# - template: src=sources.json.j2 dest=/opt/SumoCollector/sources.json owner=root group=root mode=0644
+#
+# - template: src=sumo.conf.j2 dest=/etc/sumo.conf owner=root group=root mode=0644
+#
+# - service: name=newrelic-sysmond state=started

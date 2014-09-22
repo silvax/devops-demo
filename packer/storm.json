@@ -1,0 +1,52 @@
+{
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "role": "base",
+    "version": "base",
+    "sourceami": ""
+
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "region": "us-east-1",
+    "source_ami": "{{user `sourceami`}}",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "instance_type": "m3.medium",
+    "ssh_username": "ec2-user",
+    "ami_name": "storm-amazon-linux-ebs {{isotime | clean_ami_name}}",
+    "ssh_timeout": "5m",
+    "iam_instance_profile": "default",
+    "enhanced_networking": true,
+    "vpc_id": "vpc-ba514bd8",
+    "subnet_id": "subnet-21e7b967",
+    "security_group_id": "sg-de6dd8bb",
+    "associate_public_ip_address": true,
+    "tags": {
+      "Name": "{{user `role`}}",
+      "role": "{{user `role`}}"
+    }
+  }],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo yum install python-pip -y",
+        "sudo pip install ansible"
+    ]},
+    {
+      "type": "file",
+      "source": "../storm",
+      "destination": "/opt"
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "../storm/install.yml",
+      "extra_arguments": "--verbose --limit localhost -e \"role={{user `role`}} version={{user `version`}} version={{user `version`}}\"",
+      "inventory_file": "../base/inv",
+      "playbook_dir": "../base/"
+    }
+  ]
+
+}

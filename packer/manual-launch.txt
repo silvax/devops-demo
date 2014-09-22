@@ -1,0 +1,12 @@
+# Use this command to build the base AMI
+
+packer build \
+-var 'sourceami=ami-76817c1e' \
+-var 'aws_access_key=REPLACE' \
+-var 'aws_secret_key=23Avbn+REPLACE+iAng2via/inu0z94' \
+base.json
+
+
+#AMI Versions
+
+ami-a49932cc Sept 22 

@@ -11,5 +11,13 @@ zookeepers:
     - zookeeper-1.us-east-1.inintca.com
     - zookeeper-2.us-east-1.inintca.com
     - zookeeper-3.us-east-1.inintca.com
+  stage:
+    - zookeeper-1.us-east-1.ininsca.com
+    - zookeeper-2.us-east-1.ininsca.com
+    - zookeeper-3.us-east-1.ininsca.com
+  prod:
+    - zookeeper-1.us-east-1.mypurecloud.com
+    - zookeeper-2.us-east-1.mypurecloud.com
+    - zookeeper-3.us-east-1.mypurecloud.com
 nimbushost: tagsnotread
 zk_root: tagsnotread
