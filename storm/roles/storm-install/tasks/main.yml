@@ -26,3 +26,7 @@
 - file: src=/usr/share/storm/conf dest=/etc/storm state=link
 
 - user: name=storm
+
+- copy: src=configure.sh dest=/opt/configure.sh mode=0755
+
+- shell: echo '/opt/configure.sh' >>/etc/rc.d/rc.local
