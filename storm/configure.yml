@@ -14,6 +14,5 @@
 
 
     roles:
-    - storm-configure
+    - { role: storm-configure, when: "'allTags.tags.role' == 'storm'" }
     - { role: nimbus, when: "'allTags.tags.role' == 'nimbus'" }
-    
