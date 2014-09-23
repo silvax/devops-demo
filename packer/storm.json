@@ -2,8 +2,8 @@
   "variables": {
     "aws_access_key": "",
     "aws_secret_key": "",
-    "role": "base",
-    "version": "base",
+    "role": "",
+    "version": "",
     "sourceami": ""
 
   },
@@ -30,22 +30,16 @@
   }],
   "provisioners": [
     {
-      "type": "shell",
-      "inline": [
-        "sudo yum install python-pip -y",
-        "sudo pip install ansible"
-    ]},
-    {
       "type": "file",
       "source": "../storm",
-      "destination": "/opt"
+      "destination": "/home/ec2-user"
     },
     {
       "type": "ansible-local",
       "playbook_file": "../storm/install.yml",
       "extra_arguments": "--verbose --limit localhost -e \"role={{user `role`}} version={{user `version`}} version={{user `version`}}\"",
-      "inventory_file": "../base/inv",
-      "playbook_dir": "../base/"
+      "inventory_file": "../storm/inv",
+      "playbook_dir": "../storm/"
     }
   ]
 

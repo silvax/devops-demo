@@ -1,7 +1,6 @@
 ---
   - hosts: localhost
-    sudo: false
+    sudo: true
 
     roles:
     - storm-install
-    
