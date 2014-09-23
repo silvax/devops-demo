@@ -1,0 +1,303 @@
+{
+  "Description" : "Nimbus and Storm Cluster Resources. This includes a standalone instance with EIP for nimbus and the storm ASG ",
+
+  "Parameters": {
+    "AMI" : {
+      "Type" : "String"
+    },
+    "ENVIRONMENT" : {
+      "Type" : "String"
+    },
+    "DESIREDINSTANCES" : {
+      "Type" : "String",
+      "Default": "2"
+    },
+    "MAXINSTANCES" : {
+      "Type" : "String",
+      "Default": "2"
+    },
+    "MININSTANCES" : {
+      "Type" : "String",
+      "Default": "2"
+    },
+    "STORMTYPE" : {
+      "Type" : "String",
+      "Default": "m1.medium"
+    },
+    "NIMBUSTYPE" : {
+      "Type" : "String",
+      "Default": "m1.medium"
+    },
+    "KEYNAME" : {
+      "Type" : "String",
+      "Default": "dev.ops"
+    },
+    "SUBDOMAIN" : {
+      "Type" : "String"
+    },
+    "ZKROOT" : {
+      "Type" : "String"
+    },
+    "ELBSG" : {
+      "Type" : "String"
+    },
+    "STORMSG" : {
+      "Type" : "String"
+    },
+    "NIMBUSSG" : {
+      "Type" : "String"
+    }
+},
+
+  "Mappings": {
+    "RegionMap": {
+      "us-east-1" : {
+        "kernel": "aki-88aa75e1"
+      },
+      "us-west-1" : {
+        "kernel": "aki-f77e26b2"
+      }
+    },
+    "EnvironmentMap": {
+      "dev" : {
+        "vpcid": "vpc-ba514bd8",
+        "az": ["us-east-1a", "us-east-1b"],
+        "vpcsubnet": ["subnet-7bfbc70f", "subnet-21e7b967"],
+        "vpcsubneta" : "subnet-21e7b967",
+        "domain": "inindca.com"
+      },
+      "test" : {
+        "vpcid": "vpc-09574d6b",
+        "az": [ "us-east-1a", "us-east-1b" ],
+        "vpcsubnet": ["subnet-92f4c8e6", "subnet-12e5bb54"],
+        "vpcsubneta" : "subnet-92f4c8e6",
+        "domain": "inintca.com"
+      },
+      "infra" : {
+        "vpcid": "vpc-b7504ad5",
+        "az": ["us-east-1b", "us-east-1c"],
+        "vpcsubnet": [ "subnet-b1b6cf99", "subnet-77fac603" ],
+        "vpcsubneta" : "subnet-77fac603",
+        "domain": "infrastructure.inintca.com"
+      },
+      "stage" : {
+        "vpcid": "vpc-c8ee07ad",
+        "az": [ "us-east-1a", "us-east-1b" ],
+        "vpcsubnet": ["subnet-a0191ad4", "subnet-70795536"],
+        "vpcsubneta" : "subnet-a0191ad4",
+        "domain": "ininsca.com"
+      },
+      "prod" : {
+        "az": ["us-east-1b", "us-east-1c", "us-east-1d"],
+        "vpcid": "vpc-be24f2db",
+        "vpcsubnet": ["subnet-aca89e84", "subnet-c68175b1", "subnet-81fceac7"],
+        "vpcsubneta" : "subnet-aca89e84",
+        "domain": "mypurecloud.com"
+      }
+    }
+  },
+
+  "Resources": {
+    "NimbusInstanceProfile" : {
+      "Type"       : "AWS::IAM::InstanceProfile",
+      "Properties" : {
+        "Path"  : "/",
+        "Roles" : [ "nimbus" ]
+      }
+    },
+    "NimbusNetworkInterface" : {
+      "Type" : "AWS::EC2::NetworkInterface",
+      "Properties" : {
+        "SubnetId" : {
+          "Fn::Select" : [
+              "1",
+              { "Fn::FindInMap" : [ "EnvironmentMap", { "Ref" : "ENVIRONMENT" }, "vpcsubnet"]}
+            ] },
+        "Description" :"Assigned network interface for Nimbus",
+        "GroupSet" : [ {"Ref" : "NIMBUSSG"} ]
+      }
+    },
+    "NimbusInstance" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "ImageId" : { "Ref" : "AMI" },
+        "IamInstanceProfile" : { "Ref" : "NimbusInstanceProfile" },
+        "InstanceType" : { "Ref" : "NIMBUSTYPE" },
+        "KeyName" : { "Ref" : "KEYNAME" },
+        "NetworkInterfaces" : [ { "NetworkInterfaceId" : {"Ref" : "NimbusNetworkInterface"}, "DeviceIndex" : "0" } ],
+        "BlockDeviceMappings" : [
+          { "DeviceName" : "/dev/sda2", "VirtualName" : "ephemeral0"}
+        ],
+        "Tags"                    : [
+          {
+            "Key"              : "environment",
+            "Value"            : { "Ref" : "ENVIRONMENT"}
+          },
+          {
+            "Key"               : "Name",
+            "Value"             : "nimbus"
+          },
+          {
+            "Key"               : "zk_root",
+            "Value"             : { "Ref" : "ZKROOT"}
+          },
+          {
+            "Key"               : "nimbushost",
+            "Value"             : { "Fn::GetAtt" : ["NimbusNetworkInterface", "PrimaryPrivateIpAddress"] }
+          },
+          {
+            "Key"               : "role",
+            "Value"             : "nimbus"
+          }
+        ]
+      }
+    },
+
+    "NimbusEIP" : {
+      "Type" : "AWS::EC2::EIP",
+      "Properties" : {
+        "Domain" : "vpc"
+      }
+    },
+    "AssociateNimbusEIP" : {
+      "Type" : "AWS::EC2::EIPAssociation",
+      "Properties" : {
+        "AllocationId" : { "Fn::GetAtt" : [ "NimbusEIP", "AllocationId" ]},
+        "NetworkInterfaceId" : { "Ref" : "NimbusNetworkInterface" }
+      }
+    },
+
+    "NimbusELB" : {
+      "Type"       : "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties" : {
+        "Subnets" : { "Fn::FindInMap" : [ "EnvironmentMap", { "Ref" : "ENVIRONMENT" }, "vpcsubnet"]},
+        "SecurityGroups" : [ { "Ref" : "ELBSG" } ],
+        "Scheme" :  "internet-facing",
+        "Listeners"         : [
+          { "LoadBalancerPort" : "80",    "InstancePort" : "8080",    "Protocol" : "HTTP"}
+        ],
+        "AccessLoggingPolicy" : {
+          "EmitInterval" : "5",
+          "Enabled" : "True",
+          "S3BucketName" : "ininica-elb-logs",
+          "S3BucketPrefix" : {
+            "Fn::Join" : [ "", [ { "Ref" : "ENVIRONMENT" }, ".", "nimbus-vpc" ] ]
+          }
+        },
+        "HealthCheck" : {
+          "HealthyThreshold"   : "2",
+          "Interval"           : "10",
+          "Target"             : "TCP:6627",
+          "Timeout"            : "2",
+          "UnhealthyThreshold" : "2"
+        },
+         "Instances" : [ { "Ref" : "NimbusInstance" }]
+      }
+    },
+    "DNS" : {
+      "Type" : "AWS::Route53::RecordSet",
+      "Properties" : {
+         "HostedZoneName" : {
+            "Fn::Join" : [ "", [
+                { "Fn::FindInMap" : [ "EnvironmentMap", { "Ref" : "ENVIRONMENT" }, "domain"]},
+                "."
+            ] ]
+         },
+         "Name" : {
+            "Fn::Join" : [ "", [
+              {"Ref" : "SUBDOMAIN"},
+              ".",
+              {"Ref" : "AWS::Region"},
+              ".",
+              { "Fn::FindInMap" : [ "EnvironmentMap", { "Ref" : "ENVIRONMENT" }, "domain"]},
+              "."
+            ] ]
+         },
+         "Type" : "CNAME",
+         "TTL" : "900",
+         "ResourceRecords" : [
+            { "Fn::GetAtt" : [ "NimbusELB", "DNSName" ] }
+         ]
+      }
+    },
+
+    "StormInstanceProfile" : {
+      "Type"       : "AWS::IAM::InstanceProfile",
+      "Properties" : {
+        "Path"  : "/",
+        "Roles" : [ "storm" ]
+      }
+    },
+
+    "StormLaunchConfig" : {
+      "Type"       : "AWS::AutoScaling::LaunchConfiguration",
+      "Properties" : {
+        "AssociatePublicIpAddress": true,
+        "ImageId"             : { "Ref" : "AMI" },
+        "IamInstanceProfile"  : { "Ref" : "StormInstanceProfile" },
+        "SecurityGroups"      : [ { "Ref" : "STORMSG" } ],
+        "KeyName"             : { "Ref" : "KEYNAME" },
+        "InstanceType"        : { "Ref" : "STORMTYPE" },
+        "BlockDeviceMappings" : [
+          { "DeviceName" : "/dev/sda2", "VirtualName" : "ephemeral0"}
+        ]
+      }
+    },
+    "StormASG" : {
+      "Type"       : "AWS::AutoScaling::AutoScalingGroup",
+      "Properties" : {
+        "AvailabilityZones"       : { "Fn::FindInMap" : [ "EnvironmentMap", { "Ref" : "ENVIRONMENT" }, "az"]},
+        "VPCZoneIdentifier"       : { "Fn::FindInMap" : [ "EnvironmentMap", { "Ref" : "ENVIRONMENT" }, "vpcsubnet"]},
+        "LaunchConfigurationName" : { "Ref" : "StormLaunchConfig" },
+        "MinSize"                 : { "Ref" : "MININSTANCES" },
+        "DesiredCapacity"         : { "Ref" : "DESIREDINSTANCES" },
+        "MaxSize"                 : { "Ref" : "MAXINSTANCES" },
+        "Cooldown"                : "600",
+        "TerminationPolicies"     : ["OldestInstance"],
+        "Tags"                    : [
+          {
+            "Key"              : "environment",
+            "Value"            : { "Ref" : "ENVIRONMENT"},
+            "PropagateAtLaunch" : true
+          },
+          {
+            "Key"               : "Name",
+            "Value"             : "storm",
+            "PropagateAtLaunch" : true
+          },
+          {
+            "Key"               : "zk_root",
+            "Value"             : { "Ref" : "ZKROOT"},
+            "PropagateAtLaunch" : true
+          },
+          {
+            "Key"               : "nimbushost",
+            "Value"             : { "Fn::GetAtt" : ["NimbusNetworkInterface", "PrimaryPrivateIpAddress"] },
+            "PropagateAtLaunch" : true
+          },
+          {
+            "Key"               : "role",
+            "Value"             : "storm",
+            "PropagateAtLaunch" : true
+          }
+        ]
+      }
+    }
+  },
+
+
+  "Outputs" : {
+    "NIMBUSHOST" : {
+      "Value" : {
+              "Fn::Join" : [ "", [
+                {"Ref" : "SUBDOMAIN"},
+                ".",
+                {"Ref" : "AWS::Region"},
+                ".",
+                { "Fn::FindInMap" : [ "EnvironmentMap", { "Ref" : "ENVIRONMENT" }, "domain"]}
+              ] ]
+            },
+      "Description" : "Nimbus Host DNS Record"
+    }
+  }
+}
