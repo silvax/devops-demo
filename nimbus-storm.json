@@ -10,23 +10,23 @@
     },
     "DESIREDINSTANCES" : {
       "Type" : "String",
-      "Default": "2"
+      "Default": "3"
     },
     "MAXINSTANCES" : {
       "Type" : "String",
-      "Default": "2"
+      "Default": "3"
     },
     "MININSTANCES" : {
       "Type" : "String",
-      "Default": "2"
+      "Default": "3"
     },
     "STORMTYPE" : {
       "Type" : "String",
-      "Default": "m1.medium"
+      "Default": "c3.xlarge"
     },
     "NIMBUSTYPE" : {
       "Type" : "String",
-      "Default": "m1.medium"
+      "Default": "t2.medium"
     },
     "KEYNAME" : {
       "Type" : "String",

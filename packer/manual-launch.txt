@@ -2,12 +2,26 @@
 
 packer build \
 -var 'sourceami=ami-76817c1e' \
--var 'aws_access_key=AKIAICIJTD57DLJLZDGQ' \
--var 'aws_secret_key=23Avbn+dPiAr3TZPZ4glEtR+iAng2via/inu0z94' \
+-var 'aws_access_key=REPLACEWITHKEY' \
+-var 'aws_secret_key=23Avbn+REPLACE+iAng2via/inu0z94' \
 -var 'role=storm' \
 -var 'version=present' \
 -var 'sourceami=ami-a49932cc' \
 storm.json
+
+# run CF stack
+aws cloudformation create-stack \
+--stack-name nimbus-storm-dev3 \
+--profile dev \
+--template-body file://nimbus-storm.json \
+--parameters \
+ParameterKey="AMI",ParameterValue="ami-452f2f2c" \
+ParameterKey="ENVIRONMENT",ParameterValue="dev" \
+ParameterKey="ZKROOT",ParameterValue="/storm/dev3" \
+ParameterKey="ELBSG",ParameterValue="sg-ce66d3ab" \
+ParameterKey="STORMSG",ParameterValue="sg-a5573dc0" \
+ParameterKey="SUBDOMAIN",ParameterValue="nimbus-dev3"
+
 
 
 #AMI Versions
