@@ -7,6 +7,6 @@ stderr_logfile=/var/log/supervisor/nimbus.err
 numprocs=1
 process_name=%(program_name)s-%(process_num)s
 startsecs=60
-environment=ENVIRONMENT={{ env }}
+environment=ENVIRONMENT={{ allTags.tags.environment }}
 
 stopsignal=TERM
