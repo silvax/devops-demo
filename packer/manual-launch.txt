@@ -1,12 +1,22 @@
-# Use this command to build the base AMI
+# this is to build the base AMI
 
 packer build \
--var 'sourceami=ami-76817c1e' \
--var 'aws_access_key=REPLACEWITHKEY' \
--var 'aws_secret_key=23Avbn+REPLACE+iAng2via/inu0z94' \
+-var 'sourceami=ami-08842d60' \
+-var 'aws_access_key=AKIAICIJTD57DLJLZDGQ' \
+-var 'aws_secret_key=23Avbn+dPiAr3TZPZ4glEtR+iAng2via/inu0z94' \
+-var 'role=base' \
+-var 'version=base' \
+base.json
+
+
+# Use this command to build the storm AMI
+
+packer build \
+-var 'sourceami=ami-442c862c' \
+-var 'aws_access_key=AKIAICIJTD57DLJLZDGQ' \
+-var 'aws_secret_key=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' \
 -var 'role=storm' \
 -var 'version=present' \
--var 'sourceami=ami-a49932cc' \
 storm.json
 
 # run CF stack
@@ -15,7 +25,7 @@ aws cloudformation create-stack \
 --profile dev \
 --template-body file://nimbus-storm.json \
 --parameters \
-ParameterKey="AMI",ParameterValue="ami-452f2f2c" \
+ParameterKey="AMI",ParameterValue="ami-1a2c8672" \
 ParameterKey="ENVIRONMENT",ParameterValue="dev" \
 ParameterKey="ZKROOT",ParameterValue="/storm/dev3" \
 ParameterKey="ELBSG",ParameterValue="sg-ce66d3ab" \
@@ -26,5 +36,5 @@ ParameterKey="SUBDOMAIN",ParameterValue="nimbus-dev3"
 
 #AMI Versions
 
-ami-a49932cc Sept 22 Base AMI
-ami-1e66cd76 Sept 22 Storm AMI
+ami-442c862c Sept 24 Base AMI
+ami-1a2c8672 Sept 24 Storm AMI

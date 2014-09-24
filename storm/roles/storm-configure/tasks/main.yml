@@ -14,3 +14,5 @@
 - service: name=supervisord state=restarted
 
 - supervisorctl: name=storm state=started
+
+- service: name=newrelic-sysmond state=started

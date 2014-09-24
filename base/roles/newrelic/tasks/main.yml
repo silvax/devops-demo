@@ -9,5 +9,3 @@
 
 #template nrsysmond.cfg file
 - template: src=nrsysmond.cfg.j2 dest=/etc/newrelic/nrsysmond.cfg owner=root group=root mode=0644
-
-- service: name=newrelic-sysmond state=started

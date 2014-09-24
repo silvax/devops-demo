@@ -16,3 +16,6 @@
   - supervisorctl: name=nimbus state=started
 
   - supervisorctl: name=nimbus-ui state=started
+
+  roles:
+    - sumologic

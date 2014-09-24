@@ -7,5 +7,6 @@
   action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
   register: allTags
 
-- name: install the latest version of sumo
-  yum: name=SumoCollector state=latest
+- template: src=sources.json.j2 dest=/opt/SumoCollector/sources.json owner=root group=root mode=0644
+
+- template: src=sumo.conf.j2 dest=/etc/sumo.conf owner=root group=root mode=0644
