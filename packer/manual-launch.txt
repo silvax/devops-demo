@@ -12,7 +12,7 @@ base.json
 # Use this command to build the storm AMI
 
 packer build \
--var 'sourceami=ami-442c862c' \
+-var 'sourceami=ami-b4268cdc' \
 -var 'aws_access_key=AKIAICIJTD57DLJLZDGQ' \
 -var 'aws_secret_key=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' \
 -var 'role=storm' \
@@ -36,5 +36,5 @@ ParameterKey="SUBDOMAIN",ParameterValue="nimbus-dev3"
 
 #AMI Versions
 
-ami-442c862c Sept 24 Base AMI
-ami-1a2c8672 Sept 24 Storm AMI
+ami-b4268cdc Sept 24 Base AMI
+ami-52248e3a Sept 24 Storm AMI
