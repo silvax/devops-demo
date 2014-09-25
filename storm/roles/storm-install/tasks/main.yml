@@ -17,7 +17,7 @@
 
 - user: name=storm
 
-- file: path=/var/storm mode=1644 owner=storm group=storm state=directory recurse=yes
+- file: path=/var/storm mode=0744 owner=storm group=storm state=directory recurse=yes
 
 - file: path=/var/log/storm mode=0644 owner=storm group=storm state=directory
 
