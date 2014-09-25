@@ -1,6 +1,6 @@
 ---
   - hosts: localhost
-    sudo: false
+    sudo: true
 
     tasks:
       - name: gather ec2 facts
