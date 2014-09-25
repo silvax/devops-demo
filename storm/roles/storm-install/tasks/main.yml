@@ -21,7 +21,7 @@
 
 - file: path=/var/log/storm mode=0644 owner=storm group=storm state=directory
 
-- file: path=/var/log/inin state=touch mode="g-rw,o-rw"
+- file: path=/var/log/inin state=touch mode="u+rwx,g+rw,o+rw"
 
 - copy: src=storm.log.properties dest=/usr/share/storm/log4j/storm.log.properties mode=0644
 
