@@ -15,6 +15,6 @@
 
   - service: name=supervisord state=started
 
-#  - supervisorctl: name=nimbus state=started
+ - supervisorctl: name=nimbus state=started
 
-#  - supervisorctl: name=nimbus-ui state=started
+ - supervisorctl: name=nimbus-ui state=started
