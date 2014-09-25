@@ -1,5 +1,5 @@
 ---
-  - hosts: localhost
+  - hosts: all
     sudo: true
 
     tasks:
@@ -10,11 +10,14 @@
         action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
         register: allTags
 
-      - debug: var=allTags.tags.role
+      - group_by: key={{ allTags.tags.role }}
 
+  - hosts: storm
 
     roles:
-    - { role: storm-configure, when: allTags.tags.role == storm }
-    - { role: nimbus, when: allTags.tags.role == nimbus }
-    - sumologic
-    - newrelicjava
+     - storm-configure
+
+  - hosts: nimbus
+
+    roles:
+     - nimbus

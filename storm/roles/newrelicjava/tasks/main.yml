@@ -1,0 +1,11 @@
+---
+# tasks file for new relic
+  - name: gather ec2 facts
+    action: ec2_facts
+
+  - name: get environment tag
+    action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
+    register: allTags
+
+  # #template /etc/tomcat7.conf file
+  - template: src=newrelic.yml.j2 dest=/opt/newrelicjava/newrelic.yml owner=root group=root mode=0644

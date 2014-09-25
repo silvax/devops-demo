@@ -3,7 +3,6 @@
     sudo: true
 
     roles:
-    # - tag
     - repos
     - newrelic
     - newrelicjava
