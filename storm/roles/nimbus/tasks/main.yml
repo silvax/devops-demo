@@ -7,13 +7,15 @@
     action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
     register: allTags
 
+  - service: name=supervisord state=stopped
+
   - template: src=nimbus.ini.j2 dest=/etc/supervisor.d/nimbus.ini mode=0744
 
   - template: src=nimbus-ui.ini.j2 dest=/etc/supervisor.d/nimbus-ui.ini mode=0744
 
   - template: src=storm.yaml.j2 dest=/etc/storm/storm.yaml mode=0644
 
-  - service: name=supervisord state=restarted
+  - service: name=supervisord state=started
 
   - supervisorctl: name='nimbus:' state=started
 
