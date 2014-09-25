@@ -15,17 +15,19 @@
    - unzip
    - storm
 
-- file: path=/var/storm mode=1644 state=directory
+- user: name=storm
 
-- file: path=/var/log/storm mode=0644 state=directory
+- file: path=/var/storm mode=1644 user:storm group:storm state=directory
+
+- file: path=/var/log/storm mode=0644 user:storm group:storm state=directory
+
+- file: path=/var/log/inin state=touch mode="g-rw,o-rw"
 
 - copy: src=storm.log.properties dest=/usr/share/storm/log4j/storm.log.properties mode=0644
 
 - copy: src=logrotate dest=/etc/logrotate.d/storm mode=0644
 
 - file: src=/usr/share/storm/conf dest=/etc/storm state=link
-
-- user: name=storm
 
 - copy: src=configure.sh dest=/opt/configure.sh mode=0755
 

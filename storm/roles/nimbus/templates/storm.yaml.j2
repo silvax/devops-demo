@@ -2,7 +2,7 @@ storm.local.dir:  {{ stormdir }}
 storm.local.hostname: {{ ansible_default_ipv4.address|default('tagnotset') }}
 storm.zookeeper.servers:
 {% for item in zookeepers[allTags.tags.environment] %}
-    {{ item }}
+    - {{ item }}
 {% endfor %}
 nimbus.host: {{ allTags.tags.nimbushost|default('tagnotset')  }}
 storm.zookeeper.root: {{ allTags.tags.zk_root|default('tagnotset')  }}
