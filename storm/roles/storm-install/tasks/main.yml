@@ -17,9 +17,9 @@
 
 - user: name=storm
 
-- file: path=/var/storm mode=1644 user:storm group:storm state=directory
+- file: path=/var/storm mode=1644 user=storm group=storm state=directory
 
-- file: path=/var/log/storm mode=0644 user:storm group:storm state=directory
+- file: path=/var/log/storm mode=0644 user=storm group=storm state=directory
 
 - file: path=/var/log/inin state=touch mode="g-rw,o-rw"
 
