@@ -1,12 +1,12 @@
 [program:storm]
 autostart=true
 command=/usr/share/storm/bin/storm supervisor
-user=0
+user=storm
 stdout_logfile=/var/log/supervisor/storm.log
 stderr_logfile=/var/log/supervisor/storm.err
 numprocs=1
 process_name=%(program_name)s-%(process_num)s
-startsecs=60
+startsecs=120
 environment=ENVIRONMENT={{ allTags.tags.environment }}
 
 stopsignal=TERM
