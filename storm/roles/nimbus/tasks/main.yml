@@ -13,8 +13,8 @@
 
   - template: src=storm.yaml.j2 dest=/etc/storm/storm.yaml mode=0644
 
-  - service: name=supervisord state=restarted sleep=10
+  - service: name=supervisord state=restarted
 
-  - supervisorctl: name='nimbus:' state=started
+  - supervisorctl: name='nimbus:' state=restarted
 
-  - supervisorctl: name='nimbus-ui:' state=started
+  - supervisorctl: name='nimbus-ui:' state=restarted
