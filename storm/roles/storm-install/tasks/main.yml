@@ -17,11 +17,13 @@
 
 - user: name=storm
 
+- template: src=inin.conf.j2 dest=/etc/inin.conf mode=0744
+
 - file: path=/var/storm mode=0744 owner=storm group=storm state=directory recurse=yes
 
-- file: path=/var/log/storm mode=0644 owner=storm group=storm state=directory
+- file: path=/var/log/storm mode=0744 owner=storm group=storm state=directory recurse=yes
 
-- file: path=/var/log/inin state=touch mode=0744
+- file: path=/var/log/inin mode=0744 owner=storm group=storm state=directory recurse=yes
 
 - copy: src=storm.log.properties dest=/usr/share/storm/log4j/storm.log.properties mode=0644
 
