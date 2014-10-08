@@ -18,8 +18,8 @@
            instance_tags='{"role":"mongotest"}'
            region={{ region }}
            group_id={{ group }}
-           vpc_subnet_id: {{ subnet }}
-            assign_public_ip: yes
+           vpc_subnet_id={{ subnet }}
+           assign_public_ip=yes
            wait=true
       register: ec2_info
 

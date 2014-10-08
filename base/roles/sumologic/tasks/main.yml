@@ -9,3 +9,6 @@
 
 - name: install the latest version of sumo
   yum: name=SumoCollector state=latest
+
+- name: disable SumoCollector service
+  service: name=collector enabled=no
