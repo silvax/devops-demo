@@ -9,7 +9,7 @@ log = Logger.new('/opt/jc/registration.log')
 begin
   retries ||= 3
   sleep(15)
-  JumpCloud.set_system_tags("<%= @environment %>")
+  JumpCloud.set_system_tags("{{ allTags.tags.environment }}")
   JumpCloud.set_sshPassEnabled()
   data = JumpCloud.get_system_data()
 
