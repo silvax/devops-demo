@@ -2,8 +2,8 @@
 
 packer build \
 -var 'sourceami=ami-08842d60' \
--var 'aws_access_key=AKIAICIJTD57DLJLZDGQ' \
--var 'aws_secret_key=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' \
+-var 'aws_access_key=AKIAJZDN72ZYLNACEL3A' \
+-var 'aws_secret_key=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' \
 -var 'role=base' \
 -var 'version=base' \
 base.json
