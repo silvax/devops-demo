@@ -30,6 +30,11 @@
   }],
   "provisioners": [
     {
+      "type": "file",
+      "source": "../base",
+      "destination": "/home/ec2-user"
+    },
+    {
       "type": "shell",
       "inline": [
         "sudo yum install python-pip -y",

@@ -15,7 +15,7 @@
       ec2: image={{ image }}
            instance_type={{ instance_type }}
            keypair={{ keypair }}
-           instance_tags='{"role":"mongotest"}'
+           instance_tags='{"Owner":"Andres Silva"}'
            region={{ region }}
            group_id={{ group }}
            vpc_subnet_id={{ subnet }}

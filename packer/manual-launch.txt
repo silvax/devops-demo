@@ -32,6 +32,9 @@ ParameterKey="ELBSG",ParameterValue="sg-ce66d3ab" \
 ParameterKey="STORMSG",ParameterValue="sg-a5573dc0" \
 ParameterKey="SUBDOMAIN",ParameterValue="nimbus-dev3"
 
+#to build voicemail
+/usr/local/bin/packer build -var "role=voicemail" -var "version=$BUILD_NUMBER" -var "playbook-path=/root/voicemail-service/src/main/resources/packer-ansible/ansible/ininservice/install.yml" -var "inventory-file=/root/voicemail-service/src/main/resources/packer-ansible/ansible/ininservice/inv" -var "playbook-dir=/root/voicemail-service/src/main/resources/packer-ansible/ansible/ininservice" -var "ansible-dir=/root/voicemail-service/src/main/resources/packer-ansible/ansible" /root/voicemail-service/src/main/resources/packer-ansible/voicemail-packer.json
+
 
 
 #AMI Versions

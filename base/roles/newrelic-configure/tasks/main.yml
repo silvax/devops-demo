@@ -1,0 +1,12 @@
+---
+# tasks file for new relic
+- name: Install New Relic Sysmond
+  yum:
+    name: newrelic-sysmond
+    state: latest
+
+- name: disable New Relic Server Agent service
+  service: name=newrelic-sysmond enabled=no
+
+#template nrsysmond.cfg file
+- template: src=nrsysmond.cfg.j2 dest=/etc/newrelic/nrsysmond.cfg owner=root group=root mode=0644

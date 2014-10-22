@@ -1,0 +1,34 @@
+#!/usr/bin/ruby
+
+require 'jumpcloud'
+require 'logger'
+
+log = Logger.new('/opt/jc/registration.log')
+
+
+begin
+  retries ||= 3
+  sleep(15)
+  JumpCloud.set_system_tags("<%= @environment %>")
+  JumpCloud.set_sshPassEnabled()
+  data = JumpCloud.get_system_data()
+
+  while data["tags"].length < 1 do
+    raise 'No tags applied'
+  end
+
+  while data["allowSshPasswordAuthentication"] != true do
+    raise 'SSH login is not enabled'
+  end
+
+  File.open('/var/lock/subsys/jumpcloud', 'w') do |f|
+    f.write(data)
+  end
+rescue => err
+  retries -= 1
+  log.debug(retries)
+  log.debug(err)
+  retry unless retries.zero?
+  log.debug("Exiting with exit code 1")
+  exit 1
+end
