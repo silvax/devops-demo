@@ -3,7 +3,7 @@
 
 - gem: name=jumpcloud version=0.3.0 state=present
 
-- command: curl --silent --show-error --header 'x-connect-key: 24d7f301eaa33b0dc8d40720ac5811fa75ccdb83' https://kickstart.jumpcloud.com/Kickstart >> /tmp/kickstart.sh creates=/tmp/kickstart.sh
+- command: "curl --silent --show-error --header 'x-connect-key: 24d7f301eaa33b0dc8d40720ac5811fa75ccdb83' https://kickstart.jumpcloud.com/Kickstart >> /tmp/kickstart.sh creates=/tmp/kickstart.sh"
 
 - file: path=/tmp/kickstart.sh mode=0700
 
@@ -21,4 +21,5 @@
 
 - copy: src=devops-jumpcloud dest=/etc/init.d/jumpcloud mode=0600
 
-- command: find /etc/ -maxdepth 1 -name 'passwd' -o -name 'group' -o -name 'shadow' | xargs sed -i 's/^ec2-user/devops/g' 
+- name: remove the ec2 user
+  command: find /etc/ -maxdepth 1 -name 'passwd' -o -name 'group' -o -name 'shadow' | xargs sed -i 's/^ec2-user/devops/g'
