@@ -1,6 +1,4 @@
 ---
 # tasks file for jumpcloud
 
-- yum: name=ds_agent state=latest
-
-- command: /opt/ds_agent/dsa_control -a dsm://agents.deepsecurity.trendmicro.com:443/ 'tenantID:46D68589-858E-C454-E0CF-683F299F7D58' 'tenantPassword:25D583C3-E139-5F07-F668-F159EF2B6A2E' 'policyid:21' 
+- yum: name=ossec-agent state=latest

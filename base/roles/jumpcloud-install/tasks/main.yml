@@ -1,0 +1,12 @@
+---
+# tasks file for jumpcloud
+
+- gem: name=jumpcloud version=0.3.0 state=present
+
+- command: "curl --silent --show-error --header 'x-connect-key: 24d7f301eaa33b0dc8d40720ac5811fa75ccdb83' https://kickstart.jumpcloud.com/Kickstart >> /tmp/kickstart.sh creates=/opt/kickstart.sh"
+
+- file: path=/opt/kickstart.sh mode=0700
+
+- copy: src=delete.rb dest=/opt/jc/delete.rb mode=0755
+
+- copy: src=jumpcloud dest=/etc/init.d/jumpcloud mode=0755
