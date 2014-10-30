@@ -8,5 +8,5 @@
     - newrelicjava
     - sumologic
     - supervisor
-    - jumpcloud
+    - jumpcloud-install
     - ossec-client

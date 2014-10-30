@@ -1,0 +1,13 @@
+{
+  "api.version": "v1",
+  "sources": [
+    {
+      "name": "{{ allTags.tags.role }}",
+      "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
+      "sourceType": "LocalFile",
+      "multilineProcessingEnabled": false,
+      "pathExpression": "/var/log/tomcat7/*logstash.log",
+      "timeZone": "UTC"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
 ---
 # tasks file for jumpcloud
 
-- yum: name=ossec-agent state=latest
+- yum: name=ds_agent state=latest
