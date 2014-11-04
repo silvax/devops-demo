@@ -1,0 +1,7 @@
+---
+# This file sets up per environment values for variables
+newrelic_loglevel: info
+newrelic_logfile: /var/log/newrelic/nrsysmond.log
+newrelic_license_key: f72be8dac0a3f635b7220939214ffa12e71082a2
+sumologicaccessid: suKXEnfW9MFxYf
+sumologicaccesskey: AURJxd2HTLMLP51zIlAqfwmVafcARLkmeN9CWbtpOH6xEpqJGSV3S9EQgxvYlrob
