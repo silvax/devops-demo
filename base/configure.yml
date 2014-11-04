@@ -2,12 +2,6 @@
   - hosts: all
     sudo: true
 
-    roles:
-    - newrelic-configure
-    - sumologic-configure
-    - newrelicjava
-    - ossec-client
-
     tasks:
       - name: gather ec2 facts
         action: ec2_facts
@@ -22,11 +16,37 @@
       - group_by: key={{ allTags.tags.environment }}
 
   - hosts: stage
+    sudo: true
 
     roles:
      - jumpcloud-configure
+     - newrelic-configure
+     - sumologic-configure
+     - newrelicjava
+     - ossec-client
 
   - hosts: prod
+    sudo: true
 
     roles:
      - jumpcloud-configure
+     - newrelic-configure
+     - sumologic-configure
+     - newrelicjava
+     - ossec-client
+
+  - hosts: dev
+    sudo: true
+
+    roles:
+     - newrelic-configure
+     - sumologic-configure
+     - newrelicjava
+
+  - hosts: test
+    sudo: true
+
+    roles:
+     - newrelic-configure
+     - sumologic-configure
+     - newrelicjava
