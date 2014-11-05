@@ -1,1 +1,3 @@
-ami-e4dd538c 11-4-2014 created new host_vars files for each environment to split variable settings. Added all the automation to distribute the base role to other teams. Team need to run the playbook called configure from the base playbook on all instalces. 
+ami-e4dd538c 11-4-2014 created new host_vars files for each environment to split variable settings. Added all the automation to distribute the base role to other teams. Team need to run the playbook called configure from the base playbook on all instalces.
+ami-02bf316a - 11-3-14 Changed hostname to use instance ID
+ami-ea64ea82 - Fixed copying the base playbook to the instance home folder

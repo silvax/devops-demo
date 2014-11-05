@@ -31,7 +31,7 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "../base",
+      "source": "./base",
       "destination": "/home/ec2-user"
     },
     {
@@ -42,10 +42,10 @@
     ]},
     {
       "type": "ansible-local",
-      "playbook_file": "../base/build.yml",
+      "playbook_file": "base/build.yml",
       "extra_arguments": "--verbose --limit localhost -e \"role={{user `role`}} version={{user `version`}} version={{user `version`}}\"",
-      "inventory_file": "../base/inv",
-      "playbook_dir": "../base/"
+      "inventory_file": "base/inv",
+      "playbook_dir": "base"
     }
   ]
 
