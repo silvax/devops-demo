@@ -1,0 +1,4 @@
+---
+
+  - name: Create file to update ulimit
+    copy: src=inin-ulimit.conf dest=/etc/security/limits.d/inin-ulimit.conf 
