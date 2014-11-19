@@ -13,6 +13,12 @@
         dest=/etc/yum.repos.d/
         owner=root group=root mode=0644
 
+- name: disable updates by modifying yum.conf
+  copy: src=inin.repo
+        dest=/etc/yum.repos.d/
+        owner=root group=root mode=0644
+
+
 - name: inin repository enable
   ini_file: dest=/etc/yum.repos.d/inin.repo
             section=epel

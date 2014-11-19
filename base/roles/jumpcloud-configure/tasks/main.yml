@@ -13,5 +13,7 @@
 
 - service: name=jumpcloud state=started enabled=yes
 
-- name: remove the ec2 user
-  command: find /etc/ -maxdepth 1 -name 'passwd' -o -name 'group' -o -name 'shadow' | xargs sed -i 's/^ec2-user/devops/g'
+- name: template remove-ec2-user script
+  template: src=remove-ec2-user.sh.j2 dest=/opt/remove-ec2-user.sh owner=root group=root mode=0755
+
+#- shell: echo '/opt/remove-ec2-user.sh' >>/etc/rc.d/rc.local

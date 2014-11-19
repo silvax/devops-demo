@@ -1,4 +1,7 @@
 ---
 
   - name: Create file to update ulimit
-    copy: src=inin-ulimit.conf dest=/etc/security/limits.d/inin-ulimit.conf 
+    copy: src=inin-ulimit.conf dest=/etc/security/limits.d/inin-ulimit.conf
+
+  - name: run the configure playbook at startup
+    shell: echo 'ansible-playbook -i /home/ec2-user/base/inv /home/ec2-user/base/configure.yml' >>/etc/rc.d/rc.local
