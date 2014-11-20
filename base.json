@@ -13,7 +13,7 @@
     "secret_key": "{{user `aws_secret_key`}}",
     "instance_type": "m3.medium",
     "ssh_username": "ec2-user",
-    "ami_name": "asgard-base-amazon-linux-ebs {{isotime | clean_ami_name}}",
+    "ami_name": "devops-base-amazon-linux-ebs {{isotime | clean_ami_name}}",
     "ssh_timeout": "5m",
     "iam_instance_profile": "default",
     "enhanced_networking": true,
