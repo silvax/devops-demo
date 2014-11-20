@@ -2,8 +2,8 @@
   "api.version": "v1",
   "sources": [
     {
-      "name": "{{ allTags.tags.role }}",
-      "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
+      "name": "applogstash",
+      "category" : "{{ ansible_ec2_placement_region }}/{{ allTags.tags.environment | default('dev') }}/{{ allTags.tags.role }}/{{ ansible_ec2_instance_id }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": false,
       "pathExpression": "/var/log/tomcat7/*logstash.log",
