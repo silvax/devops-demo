@@ -14,8 +14,8 @@
         owner=root group=root mode=0644
 
 - name: disable updates by modifying yum.conf
-  copy: src=inin.repo
-        dest=/etc/yum.repos.d/
+  copy: src=yum.conf
+        dest=/etc/yum.conf
         owner=root group=root mode=0644
 
 
