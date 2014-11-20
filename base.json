@@ -2,8 +2,6 @@
   "variables": {
     "aws_access_key": "",
     "aws_secret_key": "",
-    "role": "base",
-    "version": "base",
     "sourceami": "ami-08842d60"
 
   },
@@ -24,19 +22,21 @@
     "security_group_id": "sg-de6dd8bb",
     "associate_public_ip_address": true,
     "tags": {
-      "Name": "{{user `role`}}",
-      "role": "{{user `role`}}"
+      "Name": "base-packer",
+      "role": "base-packer"
     },
     "ami_block_device_mappings": [
       {
           "device_name": "/dev/sdb",
           "volume_type": "standard",
-          "volume_size":  10
+          "volume_size":  10,
+          "snapshot_id": "snap-86ece438"
       },
       {
           "device_name": "/dev/sdc",
           "volume_type": "standard",
-          "volume_size":  10
+          "volume_size":  10,
+          "snapshot_id": "snap-a3e2ea1d"
       }
     ]
   }],
@@ -50,14 +50,15 @@
       "type": "shell",
       "inline": [
         "sudo yum install python-pip -y",
-        "sudo pip install ansible"
+        "sudo pip install ansible",
+        "sudo fdisk -l"
     ]},
     {
       "type": "ansible-local",
       "playbook_file": "base/build.yml",
-      "extra_arguments": "--verbose --limit localhost -e \"role={{user `role`}} version={{user `version`}} version={{user `version`}}\"",
-      "inventory_file": "base/inv",
-      "playbook_dir": "base"
+      "playbook_dir": "base",
+      "extra_arguments": "-vvvv"
+
     }
   ]
 
