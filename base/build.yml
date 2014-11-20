@@ -3,6 +3,7 @@
     sudo: true
 
     roles:
+    - system
     - repos
     - newrelic
     - newrelicjava
@@ -10,4 +11,3 @@
     - supervisor
     - jumpcloud-install
     - ossec-client
-    - system

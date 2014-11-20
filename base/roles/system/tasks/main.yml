@@ -1,7 +1,22 @@
 ---
 
+  - name: create filesystems log
+    filesystem: fstype=ext4 dev=/dev/xvdb
+
+  - name: create filesystems tmp
+    filesystem: fstype=ext4 dev=/dev/xvdc
+
+  - name: mount the filesystem for log
+    mount: name=/var/log src=/dev/xvdb fstype=ext4 state=mounted
+
+  - name: mount the filesystem for tmp
+    mount: name=/tmp src=/dev/xvdc fstype=ext4 state=mounted
+
+  - name: set permissions for /tmp mount point
+    file: path=/tmp mode=0777 state=directory
+
   - name: Create file to update ulimit
     copy: src=inin-ulimit.conf dest=/etc/security/limits.d/inin-ulimit.conf
 
   - name: run the configure playbook at startup
-    shell: echo 'ansible-playbook -i /home/ec2-user/base/inv /home/ec2-user/base/configure.yml' >>/etc/rc.d/rc.local
+    shell: echo 'ansible-playbook -i /home/ec2-user/base/inv /home/ec2-user/base/configure.yml>>/var/log/ansible-configure.log' >>/etc/rc.d/rc.local

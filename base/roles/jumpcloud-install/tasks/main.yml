@@ -4,3 +4,12 @@
 - gem: name=jumpcloud version=0.3.0 state=present
 
 - copy: src=kickstart.sh dest=/opt/kickstart.sh mode=0700
+
+- copy: src=devops-jumpcloud dest=/etc/sudoers.d/devops-jumpcloud mode=0600
+
+- copy: src=jumpcloud dest=/etc/init.d/jumpcloud mode=0755
+
+- service: name=jumpcloud state=started enabled=no
+
+- name: template remove-ec2-user script
+  template: src=remove-ec2-user.sh.j2 dest=/opt/remove-ec2-user.sh owner=root group=root mode=0755

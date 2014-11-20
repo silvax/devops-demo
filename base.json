@@ -26,7 +26,19 @@
     "tags": {
       "Name": "{{user `role`}}",
       "role": "{{user `role`}}"
-    }
+    },
+    "ami_block_device_mappings": [
+      {
+          "device_name": "/dev/sdb",
+          "volume_type": "standard",
+          "volume_size":  10
+      },
+      {
+          "device_name": "/dev/sdc",
+          "volume_type": "standard",
+          "volume_size":  10
+      }
+    ]
   }],
   "provisioners": [
     {
