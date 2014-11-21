@@ -6,7 +6,6 @@
   "builders": [{
     "type": "amazon-ebs",
     "region": "us-east-1",
-    "secret_key": "{{user `aws_secret_key`}}",
     "instance_type": "m3.medium",
     "ssh_username": "ec2-user",
     "ami_name": "devops-base-amazon-linux-ebs {{isotime | clean_ami_name}}",
