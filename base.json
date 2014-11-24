@@ -52,8 +52,7 @@
     {
       "type": "ansible-local",
       "playbook_file": "base/build.yml",
-      "playbook_dir": "base",
-      "extra_arguments": "-vvvv"
+      "playbook_dir": "base"
 
     }
   ]

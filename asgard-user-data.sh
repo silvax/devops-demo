@@ -8,6 +8,13 @@ echo "Creating environment tag for instance"
 aws ec2 create-tags --tags Key='environment',Value='dev' --resources `curl http://169.254.169.254/latest/meta-data/instance-id/` --region us-east-1
 echo
 
+echo "Checking if the script to tag instance is present"
+if [ -f /opt/taginstance.sh ]
+  then
+  echo "Found tag instance script, running it..."
+  /opt/taginstance.sh >>/opt/taginstance.log
+fi
+
 echo "Checking if the base/configure playbook exists"
 if [ -f /home/ec2-user/base/configure.yml ]
   then
