@@ -15,7 +15,8 @@
     "enhanced_networking": true,
     "vpc_id": "vpc-ba514bd8",
     "subnet_id": "subnet-21e7b967",
-    "security_group_id": "sg-de6dd8bb",
+    "security_group_id": "sg-cf66d3aa",
+    "ssh_private_ip": true,
     "associate_public_ip_address": true,
     "tags": {
       "Name": "base-packer",
