@@ -3,7 +3,7 @@
   "sources": [
     {
       "name": "{{ ansible_ec2_placement_region }}/{{ allTags.tags.environment | default('dev') }}/{{ allTags.tags.role }}/{{ ansible_ec2_instance_id }}/applogstash",
-      "category" : "{{ allTags.tags.role }}-{{ ansible_ec2_placement_region }}",
+      "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": false,
       "pathExpression": "/var/log/tomcat7/*logstash.log",
@@ -11,7 +11,7 @@
     },
     {
       "name": "{{ ansible_ec2_placement_region }}/{{ allTags.tags.environment | default('dev') }}/{{ allTags.tags.role }}/{{ ansible_ec2_instance_id }}/ininlogstash",
-      "category" : "{{ allTags.tags.role }}-{{ ansible_ec2_placement_region }}",
+      "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": false,
       "pathExpression": "/var/log/inin/*logstash.log",
