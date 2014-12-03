@@ -13,7 +13,7 @@
       # set the hosname for the instance
       - hostname: name={{ allTags.tags.role }}-{{ ansible_ec2_local_ipv4|replace(".", "-") }}
 
-      - lineinfile: dest=/etc/hosts regexp='^127.0.0.1' line='127.0.0.1 localhost localhost.localdomain {{ allTags.tags.role }}-{{ ansible_ec2_local_ipv4|replace(".", "-") }}'
+      - lineinfile: dest=/etc/hosts regexp='^127.0.0.1' line='127.0.0.1 {{ allTags.tags.role }}-{{ ansible_ec2_local_ipv4|replace(".", "-") }}.localdomain {{ allTags.tags.role }}-{{ ansible_ec2_local_ipv4|replace(".", "-") }} localhost localhost.localdomain'
 
       - group_by: key={{ allTags.tags.environment }}
 
