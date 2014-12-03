@@ -88,6 +88,14 @@
       "multilineProcessingEnabled": false,
       "pathExpression": "/var/log/mongo/*.log",
       "timeZone": "UTC"
+    },
+    {
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/nginx",
+      "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
+      "sourceType": "LocalFile",
+      "multilineProcessingEnabled": false,
+      "pathExpression": "/var/log/nginx/*.log",
+      "timeZone": "UTC"
     }
   ]
 }
