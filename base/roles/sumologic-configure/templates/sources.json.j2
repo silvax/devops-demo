@@ -2,7 +2,7 @@
   "api.version": "v1",
   "sources": [
     {
-      "name": "{{ ansible_ec2_placement_region }}/{{ allTags.tags.environment | default('dev') }}/{{ allTags.tags.role }}/{{ ansible_ec2_instance_id }}/applogstash",
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/applogstash",
       "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": false,
@@ -10,7 +10,7 @@
       "timeZone": "UTC"
     },
     {
-      "name": "{{ ansible_ec2_placement_region }}/{{ allTags.tags.environment | default('dev') }}/{{ allTags.tags.role }}/{{ ansible_ec2_instance_id }}/ininlogstash",
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/ininlogstash",
       "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": false,
@@ -18,7 +18,7 @@
       "timeZone": "UTC"
     },
     {
-      "name": "{{ ansible_ec2_placement_region }}/{{ allTags.tags.environment | default('dev') }}/{{ allTags.tags.role }}/{{ ansible_ec2_instance_id }}/supervisor-log",
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/supervisor-log",
       "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": false,
@@ -26,7 +26,7 @@
       "timeZone": "UTC"
     },
     {
-      "name": "{{ ansible_ec2_placement_region }}/{{ allTags.tags.environment | default('dev') }}/{{ allTags.tags.role }}/{{ ansible_ec2_instance_id }}/supervisor-err",
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/supervisor-err",
       "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": false,
@@ -34,7 +34,7 @@
       "timeZone": "UTC"
     },
     {
-      "name": "{{ ansible_ec2_placement_region }}/{{ allTags.tags.environment | default('dev') }}/{{ allTags.tags.role }}/{{ ansible_ec2_instance_id }}/secure",
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/secure",
       "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": false,
@@ -42,7 +42,7 @@
       "timeZone": "UTC"
     },
     {
-      "name": "{{ ansible_ec2_placement_region }}/{{ allTags.tags.environment | default('dev') }}/{{ allTags.tags.role }}/{{ ansible_ec2_instance_id }}/catalina-out",
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/catalina-out",
       "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": true,
@@ -50,7 +50,7 @@
       "timeZone": "UTC"
     },
     {
-      "name": "{{ ansible_ec2_placement_region }}/{{ allTags.tags.environment | default('dev') }}/{{ allTags.tags.role }}/{{ ansible_ec2_instance_id }}/jetty",
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/jetty",
       "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": true,
@@ -58,7 +58,7 @@
       "timeZone": "UTC"
     },
     {
-      "name": "{{ ansible_ec2_placement_region }}/{{ allTags.tags.environment | default('dev') }}/{{ allTags.tags.role }}/{{ ansible_ec2_instance_id }}/kafka",
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/kafka",
       "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": true,
@@ -66,7 +66,7 @@
       "timeZone": "UTC"
     },
     {
-      "name": "{{ ansible_ec2_placement_region }}/{{ allTags.tags.environment | default('dev') }}/{{ allTags.tags.role }}/{{ ansible_ec2_instance_id }}/zookeeper-log",
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/zookeeper-log",
       "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": true,
@@ -74,7 +74,7 @@
       "timeZone": "UTC"
     },
     {
-      "name": "{{ ansible_ec2_placement_region }}/{{ allTags.tags.environment | default('dev') }}/{{ allTags.tags.role }}/{{ ansible_ec2_instance_id }}/zookeeper-out",
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/zookeeper-out",
       "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": true,
@@ -82,7 +82,7 @@
       "timeZone": "UTC"
     },
     {
-      "name": "{{ ansible_ec2_placement_region }}/{{ allTags.tags.environment | default('dev') }}/{{ allTags.tags.role }}/{{ ansible_ec2_instance_id }}/mongo",
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/mongo",
       "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": false,
