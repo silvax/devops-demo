@@ -7,6 +7,4 @@
     template: src=taginstance.sh.j2 dest=/opt/taginstance.sh owner=root group=root mode=0755
     register: result
 
-  - shell: /opt/taginstance.sh >> taginstance.log
-
-  - shell: echo '/opt/taginstance.sh' >>/etc/rc.d/rc.local
+  
