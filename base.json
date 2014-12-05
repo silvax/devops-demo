@@ -24,13 +24,13 @@
     },
     "ami_block_device_mappings": [
       {
-          "device_name": "/dev/sdr",
+          "device_name": "/dev/sdo",
           "volume_type": "standard",
           "volume_size":  10,
           "snapshot_id": "snap-86ece438"
       },
       {
-          "device_name": "/dev/sds",
+          "device_name": "/dev/sdp",
           "volume_type": "standard",
           "volume_size":  10,
           "snapshot_id": "snap-a3e2ea1d"
