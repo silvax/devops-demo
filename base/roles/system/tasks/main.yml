@@ -1,10 +1,10 @@
 ---
 
   - name: add the file system to fstab log
-    mount: name=/var/log src=/dev/xvdb fstype=ext4 state=present
+    mount: name=/var/log src=/dev/xvdr fstype=ext4 state=present
 
   - name: add the file system to fstab tmp
-    mount: name=/tmp src=/dev/xvdc fstype=ext4 state=present
+    mount: name=/tmp src=/dev/xvds fstype=ext4 state=present
 
   - name: Create file to update ulimit
     copy: src=inin-ulimit.conf dest=/etc/security/limits.d/inin-ulimit.conf
