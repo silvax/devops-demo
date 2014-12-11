@@ -27,13 +27,15 @@
           "device_name": "/dev/sdo",
           "volume_type": "standard",
           "volume_size":  10,
-          "snapshot_id": "snap-86ece438"
+          "snapshot_id": "snap-86ece438",
+          "delete_on_termination": true
       },
       {
           "device_name": "/dev/sdp",
           "volume_type": "standard",
           "volume_size":  10,
-          "snapshot_id": "snap-a3e2ea1d"
+          "snapshot_id": "snap-a3e2ea1d",
+          "delete_on_termination": true
       }
     ]
   }],

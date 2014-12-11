@@ -10,5 +10,5 @@
   - name: install new relic java agent
     yum: name=newrelic-java state=latest
 
-  # #template /etc/tomcat7.conf file
-  # - template: src=newrelic.yml.j2 dest=/opt/newrelicjava/newrelic.yml owner=root group=root mode=0644
+  - name: create log directory for new relic java agent
+    file: path=/var/log/newrelic-java mode=0766 state=directory
