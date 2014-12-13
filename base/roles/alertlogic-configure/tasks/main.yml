@@ -1,0 +1,21 @@
+---
+# tasks file for alertlogic
+
+- name: gather ec2 facts
+  action: ec2_facts
+
+- name: get environment tag
+  action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
+  register: allTags
+
+- copy: src={{ allTags.tags.environment }}/ dest=/var/alertlogic/etc
+
+- command: '/etc/init.d/al-threat-host configure --host vaporator.alertlogic.com --inst-type role'
+
+- service: name=al-threat-host state=started enabled=yes
+
+- service: name=al-log-agent state=started enabled=yes
+
+- copy: src=31-al-log.conf dest=/etc/rsyslog.d/31-al-log.conf
+
+- service: name=rsyslog state=restarted

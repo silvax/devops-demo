@@ -1,0 +1,6 @@
+---
+# tasks file for jumpcloud
+
+- service: name=ds_agent enabled=yes state=started
+
+- command: '/opt/ds_agent/dsa_control -a dsm://agents.deepsecurity.trendmicro.com:443/ TrendMicroTenantID TrendMicroTenantPassword'

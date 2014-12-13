@@ -1,0 +1,17 @@
+---
+# tasks file for alertlogic
+
+- name: gather ec2 facts
+  action: ec2_facts
+
+- name: get environment tag
+  action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
+  register: allTags
+
+- yum: name=al-threat-host state=latest
+
+- service: name=al-threat-host enabled=no state=stopped
+
+- yum: name=al-log-agent state=latest
+
+- service: name=al-log-agent enabled=no state=stopped
