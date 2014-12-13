@@ -9,7 +9,7 @@
 
 - copy: src=jumpcloud dest=/etc/init.d/jumpcloud mode=0755
 
-- service: name=jumpcloud state=started enabled=no
+- service: name=jumpcloud state=stopped enabled=no
 
 - name: template remove-ec2-user script
   template: src=remove-ec2-user.sh.j2 dest=/opt/remove-ec2-user.sh owner=root group=root mode=0755

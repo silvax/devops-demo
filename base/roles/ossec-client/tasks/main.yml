@@ -1,6 +1,0 @@
----
-# tasks file for jumpcloud
-
-- yum: name=ds_agent state=latest
-
-- command: '/opt/ds_agent/dsa_control -a dsm://agents.deepsecurity.trendmicro.com:443/ TrendMicroTenantID TrendMicroTenantPassword'

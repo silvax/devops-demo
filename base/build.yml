@@ -10,4 +10,5 @@
     - sumologic
     - supervisor
     - jumpcloud-install
-    - ossec-client
+    - ossec-install
+    - alertlogic-install

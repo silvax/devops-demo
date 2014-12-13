@@ -26,7 +26,8 @@
      - newrelicjava-configure
      - sumologic-configure
      - newrelicjava
-     - ossec-client
+     - ossec-configure
+     - alertlogic-configure
 
   - hosts: prod
     sudo: true
@@ -37,7 +38,8 @@
      - newrelicjava-configure
      - sumologic-configure
      - newrelicjava
-     - ossec-client
+     - ossec-configure
+     - alertlogic-configure
 
   - hosts: dev
     sudo: true
