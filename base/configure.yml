@@ -24,6 +24,7 @@
      - jumpcloud-configure
      - newrelic-configure
      - newrelicjava-configure
+     - newrelicnode-configure
      - sumologic-configure
      - newrelicjava
      - ossec-configure
@@ -36,6 +37,7 @@
      - jumpcloud-configure
      - newrelic-configure
      - newrelicjava-configure
+     - newrelicnode-configure
      - sumologic-configure
      - newrelicjava
      - ossec-configure
@@ -47,6 +49,7 @@
     roles:
      - newrelic-configure
      - newrelicjava-configure
+     - newrelicnode-configure
      - sumologic-configure
      - newrelicjava
 
@@ -56,5 +59,6 @@
     roles:
      - newrelic-configure
      - newrelicjava-configure
+     - newrelicnode-configure
      - sumologic-configure
      - newrelicjava
