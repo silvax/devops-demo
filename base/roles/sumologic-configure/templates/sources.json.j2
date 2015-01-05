@@ -104,6 +104,22 @@
       "multilineProcessingEnabled": false,
       "pathExpression": "/var/log/haproxy",
       "timeZone": "UTC"
+    },
+    {
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/jetty-logstash",
+      "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
+      "sourceType": "LocalFile",
+      "multilineProcessingEnabled": false,
+      "pathExpression": "/var/log/jetty/*logstash.log",
+      "timeZone": "UTC"
+    },
+    {
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/jetty-stderrout",
+      "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
+      "sourceType": "LocalFile",
+      "multilineProcessingEnabled": false,
+      "pathExpression": "/var/log/jetty/*stderrout.log",
+      "timeZone": "UTC"
     }
   ]
 }
