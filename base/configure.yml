@@ -30,7 +30,7 @@
      - ossec-configure
      - alertlogic-configure
 
-  - hosts: prod
+  - hosts: prod:prod-apse2
     sudo: true
 
     roles:
