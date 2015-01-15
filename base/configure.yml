@@ -26,7 +26,6 @@
      - newrelicjava-configure
      - newrelicnode-configure
      - sumologic-configure
-     - newrelicjava
      - ossec-configure
      - alertlogic-configure
 
@@ -39,7 +38,6 @@
      - newrelicjava-configure
      - newrelicnode-configure
      - sumologic-configure
-     - newrelicjava
      - ossec-configure
      - alertlogic-configure
 
@@ -51,7 +49,6 @@
      - newrelicjava-configure
      - newrelicnode-configure
      - sumologic-configure
-     - newrelicjava
 
   - hosts: test
     sudo: true
@@ -61,4 +58,3 @@
      - newrelicjava-configure
      - newrelicnode-configure
      - sumologic-configure
-     - newrelicjava
