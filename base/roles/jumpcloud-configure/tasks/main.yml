@@ -13,6 +13,6 @@
 
 - service: name=jumpcloud state=started enabled=yes
 
-- command: '/usr/bin/ruby /opt/jc/register.rb'
+- command: 'ruby /opt/jc/register.rb'
 
 #- shell: echo '/opt/remove-ec2-user.sh' >>/etc/rc.d/rc.local
