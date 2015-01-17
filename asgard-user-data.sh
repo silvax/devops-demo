@@ -4,8 +4,11 @@
 
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
+REGION=`curl http://169.254.169.254/latest/dynamic/instance-identity/document |grep region|awk -F\" '{print $4}'`
+INSTANCE_ID=`curl http://169.254.169.254/latest/meta-data/instance-id/`
+
 echo "Creating environment tag for instance"
-aws ec2 create-tags --tags Key='environment',Value='dev' --resources `curl http://169.254.169.254/latest/meta-data/instance-id/` --region us-east-1
+aws ec2 create-tags --tags Key='environment',Value='dev' --resources $INSTANCE_ID --region $REGION
 echo
 
 echo "Checking if the script to tag instance is present"
