@@ -53,7 +53,8 @@
         "sudo mkdir -p /etc/ansible",
         "sudo mv /home/ec2-user/base/ansible.cfg /etc/ansible/ansible.cfg",
         "sudo touch /var/log/ansible.log",
-        "sudo chown ec2-user:ec2-user /var/log/ansible.log"
+        "sudo chown ec2-user:ec2-user /var/log/ansible.log",
+        "sudo chmod 666 /var/log/ansible.log"
     ]},
     {
       "type": "ansible-local",
