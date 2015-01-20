@@ -120,6 +120,14 @@
       "multilineProcessingEnabled": false,
       "pathExpression": "/var/log/jetty/*stderrout.log",
       "timeZone": "UTC"
+    },
+    {
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/elasticsearch",
+      "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
+      "sourceType": "LocalFile",
+      "multilineProcessingEnabled": false,
+      "pathExpression": "/var/log/elasticsearch/*.log",
+      "timeZone": "UTC"
     }
   ]
 }

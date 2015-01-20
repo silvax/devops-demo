@@ -7,8 +7,18 @@
     action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
     register: allTags
 
-  - name: install new relic java agent
-    yum: name=newrelic-java state=latest
+  - name: download new relic javaj agent
+    command: "wget -r https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/ -nd -P /opt/newrelicjava.zip -A zip"
+
+  - name: create directory for new relic java agent
+    file: path=/opt/newrelicjava mode=0766 state=directory
+
+
+  - name: uncompress new relic java agent
+    unarchive: src=/opt/newrelicjava.zip dest=/opt/newrelicjava copy=no
+
+  # - name: install new relic java agent
+  #   yum: name=newrelic-java state=latest
 
   - name: create log directory for new relic java agent
     file: path=/var/log/newrelic-java mode=0766 state=directory
