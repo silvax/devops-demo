@@ -3,6 +3,7 @@
 
 #template nrsysmond.cfg file
 - template: src=nrsysmond.cfg.j2 dest=/etc/newrelic/nrsysmond.cfg owner=root group=root mode=0644
+- template: src=newrelic.ini.j2 dest=/etc/newrelic/newrelic.ini owner=root group=root mode=0644
 
 - name: Enable New Relic Server Agent service
   service: name=newrelic-sysmond enabled=yes state=started
