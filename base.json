@@ -52,9 +52,9 @@
         "sudo pip install ansible",
         "sudo mkdir -p /etc/ansible",
         "sudo mv /home/ec2-user/base/ansible.cfg /etc/ansible/ansible.cfg",
-        "sudo touch /var/log/ansible.log",
-        "sudo chown ec2-user:ec2-user /var/log/ansible.log",
-        "sudo chmod 666 /var/log/ansible.log"
+        "sudo touch /home/ec2-user/ansible.log",
+        "sudo chown ec2-user:ec2-user /home/ec2-user/ansible.log",
+        "sudo chmod 666 /home/ec2-user/ansible.log"
     ]},
     {
       "type": "ansible-local",
