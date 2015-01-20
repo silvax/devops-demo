@@ -8,3 +8,6 @@
 
   - name: Create file to update ulimit
     copy: src=inin-ulimit.conf dest=/etc/security/limits.d/inin-ulimit.conf
+
+  - name: copy default service discovery file
+    copy: src=inin.conf dest=/etc/inin.conf mode=0755
