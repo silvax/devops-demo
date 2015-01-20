@@ -14,7 +14,7 @@
       "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": false,
-      "pathExpression": "/var/log/inin/*logstash.log",
+      "pathExpression": "/var/log/inin/*.log",
       "timeZone": "UTC"
     },
     {
