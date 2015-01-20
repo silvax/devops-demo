@@ -28,6 +28,7 @@
      - sumologic-configure
      - ossec-configure
      - alertlogic-configure
+     - service-discovery
 
   - hosts: prod:prod-apse2
     sudo: true
@@ -40,6 +41,7 @@
      - sumologic-configure
      - ossec-configure
      - alertlogic-configure
+     - service-discovery
 
   - hosts: dev
     sudo: true
@@ -49,6 +51,7 @@
      - newrelicjava-configure
      - newrelicnode-configure
      - sumologic-configure
+     - service-discovery
 
   - hosts: test
     sudo: true
@@ -58,3 +61,4 @@
      - newrelicjava-configure
      - newrelicnode-configure
      - sumologic-configure
+     - service-discovery

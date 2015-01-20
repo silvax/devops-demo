@@ -5,3 +5,4 @@ newrelic_logfile: /var/log/newrelic/nrsysmond.log
 newrelic_license_key: 342b237cab111f8b89ad2614e1f3f2d12fd56edd
 sumologicaccessid: suKXEnfW9MFxYf
 sumologicaccesskey: AURJxd2HTLMLP51zIlAqfwmVafcARLkmeN9CWbtpOH6xEpqJGSV3S9EQgxvYlrob
+servicediscoveryurl: http://service-discovery-prod.infrastructure.inintca.com/prod-apse2/service.discovery.properties
