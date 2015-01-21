@@ -12,3 +12,4 @@
     - jumpcloud-install
     - ossec-install
     - alertlogic-install
+    - tag
