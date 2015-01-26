@@ -1,0 +1,75 @@
+---
+
+  - name: check if the volume group has been created
+    shell: pvdisplay|grep 'VG Name'|cut -c25-
+    register: volume_group_created
+    ignore_errors: yes
+
+  - name: check if log volume has been created
+    shell: lvdisplay /dev/vg.data/log|grep 'LV Path'|cut -c26-
+    register: log_volume_created
+    ignore_errors: yes
+
+  - name: check if tmp volume has been created
+    shell: lvdisplay /dev/vg.data/tmp|grep 'LV Path'|cut -c26-
+    register: tmp_volume_created
+    ignore_errors: yes
+
+  - name: check if data volume has been created
+    shell: lvdisplay /dev/vg.data/data|grep 'LV Path'|cut -c26-
+    register: data_volume_created
+    ignore_errors: yes
+
+  - name: check if filesystem has been created for log
+    shell: file -sL /dev/mapper/vg.data-log|grep ext4
+    register: log_fs_created
+    ignore_errors: yes
+
+  - name: check if filesystem has been created for tmp
+    shell: file -sL /dev/mapper/vg.data-tmp|grep ext4
+    register: tmp_fs_created
+    ignore_errors: yes
+
+  - name: check if filesystem has been created for data
+    shell: file -sL /dev/mapper/vg.data-data|grep ext4
+    register: data_fs_created
+    ignore_errors: yes
+
+  - name: create volume group for instance store instances
+    lvg: vg=vg.data pvs=/dev/xvdb state=present force=yes
+    when: volume_group_created.stdout != "vg.data"
+
+  - name: create logical volume for instance store log
+    lvol: vg=vg.data lv=log size=10G
+    when: log_volume_created.stdout != "/dev/vg.data/log"
+
+  - debug: var=tmp_volume_created.stdout
+
+  - name: create logical volume for instance store tmp
+    lvol: vg=vg.data lv=tmp size=10G
+    when: tmp_volume_created.stdout != "/dev/vg.data/tmp"
+
+  - name: create logical volume for instance store data
+    lvol: vg=vg.data lv=data size=500G
+    when: data_volume_created.stdout != "/dev/vg.data/data"
+
+  - name: create filesystem for log vol
+    filesystem: fstype=ext4 dev=/dev/mapper/vg.data-log
+    when: log_fs_created.stdout != "ext4"
+
+  - name: create filesystem for tmp
+    filesystem: fstype=ext4 dev=/dev/mapper/vg.data-tmp
+    when: tmp_fs_created.stdout != "ext4"
+
+  - name: create filesystem for data
+    filesystem: fstype=ext4 dev=/dev/mapper/vg.data-data
+    when: data_fs_created.stdout != "ext4"
+
+  - name: mount the log volume
+    mount: name=/var/log src=/dev/mapper/vg.data-log fstype=ext4 state=mounted
+
+  - name: mount the tmp volume
+    mount: name=/tmp src=/dev/mapper/vg.data-tmp fstype=ext4 state=mounted
+
+  - name: mount the log volume
+    mount: name=/data src=/dev/mapper/vg.data-data fstype=ext4 state=mounted
