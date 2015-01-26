@@ -27,13 +27,8 @@ common: &default_settings
   # For example, to report data to "My Application" and "My Application 2" use this:
   # app_name: My Application;My Application 2
   # This setting is required.
-  {% if opsworks.stack.name is not none: %}
-app_name: {{ opsworks.stack.name }}-{{ ansible_ec2_placement_region }}-{{ allTags.tags.role }}
-  {% else: %}
-app_name: {{ allTags.tags.role }}-{{ ansible_ec2_placement_region }}
-  {% endif %}
-
-
+  app_name: {{ allTags.tags.role }}
+  
   # To enable high security, set this property to true. When in high
   # security mode, the agent will use SSL and obfuscated SQL. Additionally,
   # request parameters and message parameters will not be sent to New Relic.
@@ -271,10 +266,15 @@ test:
   <<: *default_settings
   app_name:  {{ allTags.tags.role }} (Test)
 
-prod:
-  <<: *default_settings
-  app_name:  {{ allTags.tags.role }} (Production)
-
 stage:
   <<: *default_settings
   app_name:  {{ allTags.tags.role }} (Staging)
+
+prod:
+  <<: *default_settings
+  app_name:  {{ allTags.tags.role }};{{ allTags.tags.role }} (us-east-1)
+
+prod-apse2:
+  <<: *default_settings
+  app_name:  {{ allTags.tags.role }};{{ allTags.tags.role }} (ap-southeast-2)
+

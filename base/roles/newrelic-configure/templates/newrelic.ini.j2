@@ -194,17 +194,20 @@ thread_profiler.enabled = true
 # "development", "test", "staging" or "production".
 #
 
-[newrelic:development]
-monitor_mode = false
+[newrelic:dev]
+app_name = {{ allTags.tags.role }} (Development)
 
 [newrelic:test]
-monitor_mode = false
+app_name = {{ allTags.tags.role }} (Test)
 
-[newrelic:staging]
-app_name = Python Application (Staging)
-monitor_mode = true
+[newrelic:stage]
+app_name = {{ allTags.tags.role }} (Staging)
 
-[newrelic:production]
-monitor_mode = true
+[newrelic:prod]
+app_name = {{ allTags.tags.role }};{{ allTags.tags.role }} (us-east-1)
+
+[newrelic:prod-apse2]
+app_name = {{ allTags.tags.role }};{{ allTags.tags.role }} (ap-southeast-2)
+
 
 # ---------------------------------------------------------------------------

@@ -9,7 +9,8 @@ var appNames = {
   dev: "{{ allTags.tags.role }} (Development)",
   test: "{{ allTags.tags.role }} (Test)",
   stage: "{{ allTags.tags.role }} (Staging)",
-  prod: "{{ allTags.tags.role }} (Production)"
+  prod: "{{ allTags.tags.role }},{{ allTags.tags.role }} (us-east-1)",
+  "prod-apse2":"{{ allTags.tags.role }},{{ allTags.tags.role }} (ap-southeast-2)"
 };
 
 exports.config = {

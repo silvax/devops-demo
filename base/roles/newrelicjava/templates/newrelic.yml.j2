@@ -262,10 +262,16 @@ test:
   <<: *default_settings
   app_name:  {{ allTags.tags.role }} (Test)
 
-prod:
-  <<: *default_settings
-  app_name:  {{ allTags.tags.role }} (Production)
-
 stage:
   <<: *default_settings
   app_name:  {{ allTags.tags.role }} (Staging)
+
+prod:
+  <<: *default_settings
+  app_name:  {{ allTags.tags.role }};{{ allTags.tags.role }} (us-east-1)
+
+prod-apse2:
+  <<: *default_settings
+  app_name:  {{ allTags.tags.role }};{{ allTags.tags.role }} (ap-southeast-2)
+
+
