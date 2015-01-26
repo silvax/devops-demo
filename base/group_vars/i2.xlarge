@@ -1,0 +1,6 @@
+---
+log_vol_size: 10G
+tmp_vol_size: 10G
+data_vol_size: 500G
+pvs_list:
+  - /dev/xvdb

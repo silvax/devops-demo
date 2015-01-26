@@ -1,5 +1,8 @@
 ---
 
+  - name: unmount xvdb if mounted
+    mount: name=/media/ephemeral0 src=/dev/xvdb state=unmounted fstype=ext3
+
   - name: check if the volume group has been created
     shell: pvdisplay|grep 'VG Name'|cut -c25-
     register: volume_group_created
@@ -35,22 +38,26 @@
     register: data_fs_created
     ignore_errors: yes
 
+  - debug: var=pvs_list
+
+  - debug: var={{ pvs_list|join(',')}}
+
   - name: create volume group for instance store instances
-    lvg: vg=vg.data pvs=/dev/xvdb state=present force=yes
+    lvg: vg=vg.data pvs={{ pvs_list|join (',') }} state=present force=yes
     when: volume_group_created.stdout != "vg.data"
 
   - name: create logical volume for instance store log
-    lvol: vg=vg.data lv=log size=10G
+    lvol: vg=vg.data lv=log size={{ log_vol_size }}
     when: log_volume_created.stdout != "/dev/vg.data/log"
 
   - debug: var=tmp_volume_created.stdout
 
   - name: create logical volume for instance store tmp
-    lvol: vg=vg.data lv=tmp size=10G
+    lvol: vg=vg.data lv=tmp size={{ tmp_vol_size }}
     when: tmp_volume_created.stdout != "/dev/vg.data/tmp"
 
   - name: create logical volume for instance store data
-    lvol: vg=vg.data lv=data size=500G
+    lvol: vg=vg.data lv=data size={{ data_vol_size }}
     when: data_volume_created.stdout != "/dev/vg.data/data"
 
   - name: create filesystem for log vol

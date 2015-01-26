@@ -5,34 +5,36 @@
     "role"                : "base",
     "environment"         : "dev",
     "virtualization_type" : "hvm",
-    "instance_type"       : "i2.xlarge",
-    "aws_access_key"      : "AKIAICIJTD57DLJLZDGQ",
-    "aws_access_key"      : "23Avbn+dPiAr3TZPZ4glEtR+iAng2via/inu0z94"
+    "instance_type"       : "i2.xlarge"
   },
   "builders": [{
     "type"            : "amazon-instance",
     "access_key"      : "{{user `aws_access_key`}}",
     "secret_key"      : "{{user `aws_secret_key`}}",
-    "ami_regions" : ["ap-southeast-2"],
-    "ami_users" : ["490606849374","654283760568","546684437830","765628985471","607886752321"],
-    "source_ami": "{{user `sourceami`}}",
-    "s3_bucket"       : "inin-private-amis",
-    "account_id"      : "607886752321",
+    "region"          : "us-east-1",
+    "ami_regions"     : ["ap-southeast-2"],
+    "ami_users"       : ["654283760568","546684437830","765628985471","607886752321"],
+    "source_ami"      : "{{user `sourceami`}}",
+    "s3_bucket"       : "inin-custom-amis",
+    "account_id"      : "490606849374",
     "source_ami"      : "{{user `source_ami`}}",
     "instance_type"   : "{{user `instance_type`}}",
+    "iam_instance_profile": "default",
     "ssh_username"    : "ec2-user",
+    "ssh_timeout"     : "5m",
     "ami_name"        : "{{user `role`}} {{user `virtualization_type`}} instance-store {{isotime | clean_ami_name}}",
     "ami_description" : "{{user `role`}} {{user `virtualization_type`}} instance-store {{isotime | clean_ami_name}}",
-    "x509_cert_path"  : "certs/dev.ops.certificate.pem",
-    "x509_key_path"   : "certs/dev.ops.private-key.pem",
+    "x509_cert_path"  : "certs/devops-dev.crt",
+    "x509_key_path"   : "certs/devops-dev.key",
     "run_tags"        : { "Name" : "{{user `role`}}_packer_instance_store" },
     "ami_virtualization_type" : "{{user `virtualization_type`}}",
     "enhanced_networking"     : true,
-    "ami_block_device_mappings" : [{
-      "device_name"           : "/dev/sdp",
-      "virtual_name"          : "ephemeral0"
-      }]
-    }],
+    "vpc_id": "vpc-ba514bd8",
+    "subnet_id": "subnet-21e7b967",
+    "security_group_id": "sg-cf66d3aa",
+    "ssh_private_ip": true,
+    "associate_public_ip_address": true
+  }],
   "provisioners": [
     {
       "type": "file",
@@ -53,9 +55,7 @@
     {
         "type": "ansible-local",
         "playbook_file": "base/build.yml",
-        "playbook_dir": "base",
-        "extra_arguments": "--limit localhost -e \"role={{user `role`}} \""
-
+        "playbook_dir": "base"
     }
   ]
 }
