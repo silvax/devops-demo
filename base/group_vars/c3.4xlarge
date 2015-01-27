@@ -4,3 +4,4 @@ tmp_vol_size: 10G
 data_vol_size: 200G
 pvs_list:
   - /dev/xvdb
+  - /dev/xvdc

@@ -5,3 +5,4 @@ data_vol_size: 10G
 pvs_list:
   - /dev/xvdb
   - /dev/xvdc
+number_of_volumes: 2

@@ -79,8 +79,9 @@
     roles:
       - ebs-volumes
 
-  - hosts : i2.xlarge:c3.large:&instance-store
+  - hosts : c3.4xlarge:i2.xlarge:c3.large:&instance-store
     sudo: true
 
     roles:
+      - instance-store-raid
       - instance-store-volumes

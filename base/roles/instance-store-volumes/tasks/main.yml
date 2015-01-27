@@ -38,19 +38,13 @@
     register: data_fs_created
     ignore_errors: yes
 
-  - debug: var=pvs_list
-
-  - debug: var={{ pvs_list|join(',')}}
-
   - name: create volume group for instance store instances
-    lvg: vg=vg.data pvs={{ pvs_list|join (',') }} state=present force=yes
+    lvg: vg=vg.data pvs=/dev/md0 state=present force=yes
     when: volume_group_created.stdout != "vg.data"
 
   - name: create logical volume for instance store log
     lvol: vg=vg.data lv=log size={{ log_vol_size }}
     when: log_volume_created.stdout != "/dev/vg.data/log"
-
-  - debug: var=tmp_volume_created.stdout
 
   - name: create logical volume for instance store tmp
     lvol: vg=vg.data lv=tmp size={{ tmp_vol_size }}
