@@ -6,8 +6,6 @@
   "builders": [{
     "type": "amazon-ebs",
     "region": "us-east-1",
-    "ami_regions" : ["ap-southeast-2"],
-    "ami_users" : ["490606849374","654283760568","546684437830","765628985471","607886752321"],
     "source_ami": "{{user `sourceami`}}",
     "instance_type": "m3.medium",
     "ssh_username": "ec2-user",
