@@ -27,7 +27,12 @@ common: &default_settings
   # For example, to report data to "My Application" and "My Application 2" use this:
   # app_name: My Application;My Application 2
   # This setting is required.
-  app_name: {{ allTags.tags.role }}
+{% set app_name = allTags.tags.role if opsworks.stack.name is none else opsworks.stack.name + "-" + allTags.tags.role %}
+{% if newrelic_suffix is not none %}
+  app_name: {{ app_name }} {{ newrelic_suffix }}
+{% else %}
+  app_name: {{ app_name }};{{ app_name }} ({{ ansible_ec2_placement_region }})
+{% endif %}
   
   # To enable high security, set this property to true. When in high
   # security mode, the agent will use SSL and obfuscated SQL. Additionally,
@@ -258,23 +263,8 @@ common: &default_settings
 # NOTE if your application has other named environments, you should
 # provide configuration settings for these environments here.
 
-dev:
+# We use templating rather than explicitly configured environments:
+{{ allTags.tags.environment }}:
   <<: *default_settings
-  app_name: {{ allTags.tags.role }} (Development)
 
-test:
-  <<: *default_settings
-  app_name:  {{ allTags.tags.role }} (Test)
-
-stage:
-  <<: *default_settings
-  app_name:  {{ allTags.tags.role }} (Staging)
-
-prod:
-  <<: *default_settings
-  app_name:  {{ allTags.tags.role }};{{ allTags.tags.role }} (us-east-1)
-
-prod-apse2:
-  <<: *default_settings
-  app_name:  {{ allTags.tags.role }};{{ allTags.tags.role }} (ap-southeast-2)
 

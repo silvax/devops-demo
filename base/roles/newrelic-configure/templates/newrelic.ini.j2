@@ -33,7 +33,11 @@ license_key = {{ newrelic_license_key }}
 # application as you would like it to show up in New Relic UI.
 # The UI will then auto-map instances of your application into a
 # entry on your home dashboard page.
-app_name = {{ allTags.tags.role }}
+{% if newrelic_suffix is not none %}
+app_name = {{ allTags.tags.role }} {{ newrelic_suffix }}
+{% else %}
+app_name = {{ allTags.tags.role }};{{ allTags.tags.role }} ({{ ansible_ec2_placement_region }})
+{% endif %}
 
 # When "true", the agent collects performance data about your
 # application and reports this data to the New Relic UI at
@@ -194,20 +198,7 @@ thread_profiler.enabled = true
 # "development", "test", "staging" or "production".
 #
 
-[newrelic:dev]
-app_name = {{ allTags.tags.role }} (Development)
-
-[newrelic:test]
-app_name = {{ allTags.tags.role }} (Test)
-
-[newrelic:stage]
-app_name = {{ allTags.tags.role }} (Staging)
-
-[newrelic:prod]
-app_name = {{ allTags.tags.role }};{{ allTags.tags.role }} (us-east-1)
-
-[newrelic:prod-apse2]
-app_name = {{ allTags.tags.role }};{{ allTags.tags.role }} (ap-southeast-2)
-
+# We use templating rather than explicitly configured environments:
+[{{ allTags.tags.environment }}]
 
 # ---------------------------------------------------------------------------
