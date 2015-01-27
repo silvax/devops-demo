@@ -5,7 +5,7 @@
     "role"                : "base",
     "environment"         : "dev",
     "virtualization_type" : "hvm",
-    "instance_type"       : "i2.xlarge"
+    "instance_type"       : "m3.medium"
   },
   "builders": [{
     "type"            : "amazon-instance",
