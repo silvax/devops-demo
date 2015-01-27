@@ -1,0 +1,13 @@
+---
+
+  - name: unmount xvdb if mounted
+    mount: name=/media/ephemeral0 src=/dev/xvdb state=unmounted fstype=ext3
+
+  - name: check if /dev/md0 has been created
+    shell: "mdadm -D /dev/md0"
+    ignore_errors: yes
+    register: md0_created
+
+  - name: create raid 0 with disks availabe
+    shell: "yes|mdadm --create --verbose /dev/md0 --level=stripe --raid-devices={{ pvs_list|length }} {{ pvs_list|join (' ') }}"
+    when: md0_created.rc != 0

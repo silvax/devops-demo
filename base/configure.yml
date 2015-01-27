@@ -10,12 +10,22 @@
         action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
         register: allTags
 
+      - name: determine if instance is ebs backed or instance store
+        command: "aws ec2 describe-images --image-ids {{ ansible_ec2_ami_id }} --query='Images[0].RootDeviceType' --region {{ ansible_ec2_placement_region }} --output=text"
+        register: root_device_type
+
       # set the hosname for the instance
       - hostname: name={{ allTags.tags.role }}-{{ ansible_ec2_local_ipv4|replace(".", "-") }}
 
       - lineinfile: dest=/etc/hosts regexp='^127.0.0.1' line='127.0.0.1 {{ allTags.tags.role }}-{{ ansible_ec2_local_ipv4|replace(".", "-") }}.localdomain {{ allTags.tags.role }}-{{ ansible_ec2_local_ipv4|replace(".", "-") }} localhost localhost.localdomain'
 
       - group_by: key={{ allTags.tags.environment }}
+
+      - group_by: key={{ root_device_type.stdout }}
+
+      - group_by: key={{ ansible_ec2_instance_type }}
+
+      - debug: var=root_device_type
 
   - hosts: stage
     sudo: true
@@ -62,3 +72,16 @@
      - newrelicnode-configure
      - sumologic-configure
      - service-discovery
+
+  - hosts : Ebs
+    sudo: true
+
+    roles:
+      - ebs-volumes
+
+  - hosts : c3.4xlarge:i2.xlarge:c3.large:&instance-store
+    sudo: true
+
+    roles:
+      - instance-store-raid
+      - instance-store-volumes
