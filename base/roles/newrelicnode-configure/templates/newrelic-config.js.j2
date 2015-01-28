@@ -5,18 +5,16 @@
  * description of configuration variables and their potential values.
  */
 
-var appNames = {
-  dev: "{{ allTags.tags.role }} (Development)",
-  test: "{{ allTags.tags.role }} (Test)",
-  stage: "{{ allTags.tags.role }} (Staging)",
-  prod: "{{ allTags.tags.role }} (Production)"
-};
-
 exports.config = {
   /**
    * Array of application names.
    */
-  app_name : appNames['{{ allTags.tags.environment }}'],
+{% if newrelic_suffix is not none %}
+  app_name : ['{{ allTags.tags.role }} {{ newrelic_suffix }}'],
+{% else %}
+  app_name : ['{{ allTags.tags.role }}', '{{ allTags.tags.role }} ({{ ansible_ec2_placement_region }})'],
+{% endif %}
+
   /**
    * Your New Relic license key.
    */
