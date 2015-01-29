@@ -1,7 +1,7 @@
 ---
 
   - name: get mount points
-    shell: "grep xvdb | cut -d' ' -f3"
+    shell: "mount | grep xvdb | cut -d' ' -f3"
     register: mount_points
 
   - name: unmount xvdb if mounted

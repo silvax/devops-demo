@@ -11,6 +11,7 @@
     "type"            : "amazon-instance",
     "region"          : "us-east-1",
     "s3_bucket"       : "inin-custom-amis",
+    "bundle_prefix"   : "inin-{{user `role`}}-{{timestamp}}",
     "account_id"      : "490606849374",
     "source_ami"      : "{{user `source_ami`}}",
     "instance_type"   : "{{user `instance_type`}}",
