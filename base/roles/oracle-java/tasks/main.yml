@@ -8,13 +8,26 @@
 # Specify the version you want from your install playbook. Example:
 #
 # roles:
-#   - oracle-java (installs the default version defined in defaults/main.yml)
+#   - oracle-java (installs default min Java 7 version)
+#   - { role: oracle-java, java_version: "7" } (installs default min Java 7 version)
+#   - { role: oracle-java, java_version: "8" } (installs default min Java 8 version)
 #   - { role: oracle-java, java_version: "1.7.0_75" } (installs 1.7u75)
 #   - { role: oracle-java, java_version: "1.8.0_31" } (installs 1.8u31)
 #
-- name: Set Java version
+- name: Set (default/minimum) Java 7 version
   set_fact:
-    ver: "{{ java_version | default(java_version) }}"
+    ver: "{{ min_java7_version }}"
+  when: java_version is undefined or java_version == "7"
+
+- name: Set to minimum Java 8 version
+  set_fact:
+    ver: "{{ min_java8_version }}"
+  when: ver is undefined and java_version == "8"
+
+- name: Set to Java version specified by role parameter
+  set_fact:
+    ver: "{{ java_version }}"
+  when: ver is undefined
 
 - name: Try installing using the "jdk-" package. Works for Java 7 packages.
   yum: name=jdk-{{ ver }}
