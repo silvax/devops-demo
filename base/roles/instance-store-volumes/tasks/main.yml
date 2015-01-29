@@ -1,5 +1,8 @@
 ---
 
+  - name: stop supervisord
+    service: name=supervisord state=stopped
+
   - name: unmount xvdb if mounted
     mount: name=/media/ephemeral0 src=/dev/xvdb state=unmounted fstype=ext3
 
@@ -74,3 +77,8 @@
 
   - name: mount the log volume
     mount: name=/data src=/dev/mapper/vg.data-data fstype=ext4 state=mounted
+
+  - file: path=/var/log/supervisor state=directory
+
+  - name: start supervisord
+    service: name=supervisord state=started
