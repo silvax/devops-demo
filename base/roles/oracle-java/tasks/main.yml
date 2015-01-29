@@ -1,0 +1,36 @@
+---
+# Install the Oracle JDK
+# The JDK must exist in Artifactory that follows the naming convention:
+# https://confluence.inin.com/display/PureCloud/How+to+add+new+Oracle+JDK+to+Artifactory+that+is+supported+by+puppet
+#
+# The OpenJDK must remain on the instance because of dependencies with aws-apitoools-* packages.
+#
+# Specify the version you want from your install playbook. Example:
+#
+# roles:
+#   - oracle-java (installs the default version defined in defaults/main.yml)
+#   - { role: oracle-java, java_version: "1.7.0_75" } (installs 1.7u75)
+#   - { role: oracle-java, java_version: "1.8.0_31" } (installs 1.8u31)
+#
+- name: Set Java version
+  set_fact:
+    ver: "{{ java_version | default(java_version) }}"
+
+- name: Try installing using the "jdk-" package. Works for Java 7 packages.
+  yum: name=jdk-{{ ver }}
+  register: result
+  ignore_errors: True
+
+- name: Fall back to using the "jdk" package. Works for Java 8 packages.
+  yum: name=jdk{{ ver }}
+  when: result|failed
+
+- alternatives: name=jar link=/usr/bin/jar path=/usr/java/jdk{{ ver }}/bin/jar
+
+- alternatives: name=java link=/usr/bin/java path=/usr/java/jdk{{ ver }}/bin/java
+
+- alternatives: name=javac link=/usr/bin/javac path=/usr/java/jdk{{ ver }}/bin/javac
+
+- alternatives: name=javadoc link=/usr/bin/javadoc path=/usr/java/jdk{{ ver }}/bin/javadoc
+
+- alternatives: name=javaws link=/usr/bin/javaws path=/usr/java/jdk{{ ver }}/bin/javaws
