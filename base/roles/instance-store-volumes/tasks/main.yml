@@ -75,7 +75,7 @@
   - file: path=/home/ec2-user/log_backup state=directory
 
   - name: backup log directory tree
-    shell: "find /var/log -type d > /home/ec2-user/log_directory_structure.txt"
+    shell: "find /var/log -mount -type d > /home/ec2-user/log_directory_structure.txt"
 
   - name: backup log directory acls
     shell: "getfacl -R --absolute-names /var/log > /home/ec2-user/log_directory_acls.txt"
