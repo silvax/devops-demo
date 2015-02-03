@@ -28,6 +28,7 @@
     "tags": {
       "Name"               : "base-packer",
       "role"               : "{{ user `role` }}",
+      "owner"              : "devops-cloudapplications@inin.com",
       "type"               : "ebs",
       "sourceami"          : "{{ user `sourceami` }}",
       "source_repo"        : "{{ user `source_repo` }}",
