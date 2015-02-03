@@ -22,6 +22,11 @@
       "Name": "base-packer",
       "role": "base-packer"
     },
+    "run_tags": {
+      "Name": "base-packer",
+      "role": "base-packer",
+      "builder": "base-packer"
+    },
     "ami_block_device_mappings": [
       {
           "device_name": "/dev/sdo",
