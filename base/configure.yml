@@ -27,6 +27,14 @@
 
       - debug: var=root_device_type
 
+  # This must go first as mounting volumes over existing volumes causes issues for services writing to those locations
+  - hosts : i2.2xlarge:c3.2xlarge:c3.xlarge:c3.4xlarge:i2.xlarge:c3.large:&instance-store
+    sudo: true
+
+    roles:
+      - instance-store-raid
+      - instance-store-volumes
+
   - hosts: stage
     sudo: true
 
@@ -78,10 +86,3 @@
 
     roles:
       - ebs-volumes
-
-  - hosts : i2.2xlarge:c3.2xlarge:c3.xlarge:c3.4xlarge:i2.xlarge:c3.large:&instance-store
-    sudo: true
-
-    roles:
-      - instance-store-raid
-      - instance-store-volumes

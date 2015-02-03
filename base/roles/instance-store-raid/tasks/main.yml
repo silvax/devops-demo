@@ -1,7 +1,12 @@
 ---
 
+  - name: get mount points
+    shell: "mount | grep xvdb | cut -d' ' -f3"
+    register: mount_points
+
   - name: unmount xvdb if mounted
-    mount: name=/media/ephemeral0 src=/dev/xvdb state=unmounted fstype=ext3
+    mount: name={{ item }} src=/dev/xvdb state=unmounted fstype=ext3
+    with_items: mount_points.stdout_lines
 
   - name: check if /dev/md0 has been created
     shell: "mdadm -D /dev/md0"

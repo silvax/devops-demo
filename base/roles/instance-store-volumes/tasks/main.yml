@@ -66,11 +66,41 @@
     filesystem: fstype=ext4 dev=/dev/mapper/vg.data-data
     when: data_fs_created.stdout != "ext4"
 
+  - name: stop services
+    service: name={{ item }} state=stopped
+    with_items:
+    - supervisord
+    - rsyslog
+
+  - file: path=/home/ec2-user/log_backup state=directory
+
+  - name: backup log directory tree
+    shell: "find /var/log -mount -type d > /home/ec2-user/log_directory_structure.txt"
+
+  - name: backup log directory acls
+    shell: "getfacl -R --absolute-names /var/log > /home/ec2-user/log_directory_acls.txt"
+
   - name: mount the log volume
     mount: name=/var/log src=/dev/mapper/vg.data-log fstype=ext4 state=mounted
+
+  - name: mount the data volume
+    mount: name=/data src=/dev/mapper/vg.data-data fstype=ext4 state=mounted
 
   - name: mount the tmp volume
     mount: name=/tmp src=/dev/mapper/vg.data-tmp fstype=ext4 state=mounted
 
-  - name: mount the log volume
-    mount: name=/data src=/dev/mapper/vg.data-data fstype=ext4 state=mounted
+  - name: set permissions on tmp directory
+    file: path=/tmp state=directory mode=1777
+
+  - name: restore log directory tree
+    shell: "xargs mkdir -p < /home/ec2-user/log_directory_structure.txt"
+
+  - name: restore log directory acls
+    shell: "setfacl --restore=/home/ec2-user/log_directory_acls.txt"
+    ignore_errors: yes
+
+  - name: start services
+    service: name={{ item }} state=started
+    with_items:
+    - supervisord
+    - rsyslog
