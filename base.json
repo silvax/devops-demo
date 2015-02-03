@@ -1,7 +1,11 @@
 {
   "variables": {
-    "sourceami": "ami-08842d60"
-
+    "sourceami": "ami-08842d60",
+    "role"                : "base",
+    "instance_type"       : "m3.medium",
+    "source_repo"         : "ansible-base",
+    "source_commit_hash"  : "not set",
+    "build"               : "not set"
   },
   "builders": [{
     "type": "amazon-ebs",
@@ -9,7 +13,7 @@
     "source_ami": "{{user `sourceami`}}",
     "instance_type": "m3.medium",
     "ssh_username": "ec2-user",
-    "ami_name": "devops-base-amazon-linux-ebs {{isotime | clean_ami_name}}",
+    "ami_name" : "{{user `role`}}-instance-store {{isotime | clean_ami_name}}",
     "ssh_timeout": "5m",
     "iam_instance_profile": "default",
     "enhanced_networking": true,
@@ -19,8 +23,14 @@
     "ssh_private_ip": true,
     "associate_public_ip_address": true,
     "tags": {
-      "Name": "base-packer",
-      "role": "base-packer"
+      "Name"               : "base-packer",
+      "role"               : "{{ user `role` }}",
+      "type"               : "instance-store",
+      "sourceami"          : "{{ user `sourceami` }}",
+      "source_repo"        : "{{ user `source_repo` }}",
+      "source_commit_hash" : "{{ user `source_commit_hash` }}",
+      "build"              : "{{ user `build` }}",
+      "build_time"         : "{{ isotime }}"
     },
     "ami_block_device_mappings": [
       {
@@ -51,10 +61,15 @@
         "sudo yum install python-pip -y",
         "sudo pip install ansible==1.7.1",
         "sudo mkdir -p /etc/ansible",
+        "sudo chown ec2-user:ec2-user /etc/ansible",
         "sudo mv /home/ec2-user/base/ansible.cfg /etc/ansible/ansible.cfg",
+        "sudo chown ec2-user:ec2-user /etc/ansible/ansible.cfg",
         "sudo touch /home/ec2-user/ansible.log",
         "sudo chown ec2-user:ec2-user /home/ec2-user/ansible.log",
-        "sudo chmod 666 /home/ec2-user/ansible.log"
+        "sudo chmod 666 /home/ec2-user/ansible.log",
+        "echo 'source_repo: {{user `source_repo`}}' >> /home/ec2-user/ami_info.txt",
+        "echo 'commit_hash: {{user `source_commit_hash`}}' >> /home/ec2-user/ami_info.txt",
+        "echo 'build: {{user `build`}}' >> /home/ec2-user/ami_info.txt"
     ]},
     {
       "type": "ansible-local",
