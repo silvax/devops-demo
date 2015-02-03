@@ -3,9 +3,11 @@
     "sourceami": "ami-08842d60",
     "role"                : "base",
     "instance_type"       : "m3.medium",
-    "source_repo"         : "ansible-base",
-    "source_commit_hash"  : "not set",
-    "build"               : "not set"
+    "source_repo"         : "{{ env `GIT_URL` }}",
+    "source_commit_hash"  : "{{ env `GIT_COMMIT` }}",
+    "build"               : "{{ env `JOB_NAME` }}",
+    "build_number"        : "{{ env `BUILD_NUMBER` }}",
+    "build_url"           : "{{ env `BUILD_URL` }}"
   },
   "builders": [{
     "type": "amazon-ebs",
@@ -25,12 +27,13 @@
     "tags": {
       "Name"               : "base-packer",
       "role"               : "{{ user `role` }}",
-      "type"               : "instance-store",
+      "type"               : "ebs",
       "sourceami"          : "{{ user `sourceami` }}",
       "source_repo"        : "{{ user `source_repo` }}",
       "source_commit_hash" : "{{ user `source_commit_hash` }}",
       "build"              : "{{ user `build` }}",
-      "build_time"         : "{{ isotime }}"
+      "build_number"       : "{{ user `build_number` }}",
+      "build_url"          : "{{ user `build_url` }}"
     },
     "ami_block_device_mappings": [
       {
@@ -57,20 +60,8 @@
     },
     {
       "type": "shell",
-      "inline": [
-        "sudo yum install python-pip -y",
-        "sudo pip install ansible==1.7.1",
-        "sudo mkdir -p /etc/ansible",
-        "sudo chown ec2-user:ec2-user /etc/ansible",
-        "sudo mv /home/ec2-user/base/ansible.cfg /etc/ansible/ansible.cfg",
-        "sudo chown ec2-user:ec2-user /etc/ansible/ansible.cfg",
-        "sudo touch /home/ec2-user/ansible.log",
-        "sudo chown ec2-user:ec2-user /home/ec2-user/ansible.log",
-        "sudo chmod 666 /home/ec2-user/ansible.log",
-        "echo 'source_repo: {{user `source_repo`}}' >> /home/ec2-user/ami_info.txt",
-        "echo 'commit_hash: {{user `source_commit_hash`}}' >> /home/ec2-user/ami_info.txt",
-        "echo 'build: {{user `build`}}' >> /home/ec2-user/ami_info.txt"
-    ]},
+      "script": "packer.sh"
+    },
     {
       "type": "ansible-local",
       "playbook_file": "base/build.yml",
