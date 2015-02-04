@@ -24,12 +24,16 @@
     "security_group_id": "sg-cf66d3aa",
     "ssh_private_ip": true,
     "associate_public_ip_address": true,
+    "run_tags": {
+      "Name"               : "{{ user `role` }}-packer",
+      "role"               : "{{ user `role` }}-packer"
+    },
     "tags": {
       "Name"               : "base-packer",
       "role"               : "{{ user `role` }}",
       "owner"              : "devops-cloudapplications@inin.com",
       "type"               : "ebs",
-      "source_ami"          : "{{ user `sourceami` }}",
+      "source_ami"         : "{{ user `sourceami` }}",
       "source_repo"        : "{{ user `source_repo` }}",
       "source_commit_hash" : "{{ user `source_commit_hash` }}",
       "build"              : "{{ user `build` }}",

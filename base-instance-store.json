@@ -24,7 +24,10 @@
     "ami_name"        : "{{user `role`}}-{{user `virtualization_type`}}-instance-store {{isotime | clean_ami_name}}",
     "x509_cert_path"  : "certs/devops-dev.crt",
     "x509_key_path"   : "certs/devops-dev.key",
-    "run_tags"        : { "Name" : "{{user `role`}}_packer_instance_store" },
+    "run_tags": {
+      "Name"               : "{{ user `role` }}-packer",
+      "role"               : "{{ user `role` }}-packer"
+    },
     "tags": {
       "Name"               : "base-packer",
       "role"               : "{{ user `role` }}",
