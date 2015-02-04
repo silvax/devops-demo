@@ -8,8 +8,9 @@ sudo chown ec2-user:ec2-user /etc/ansible/ansible.cfg
 sudo touch /home/ec2-user/ansible.log
 sudo chown ec2-user:ec2-user /home/ec2-user/ansible.log
 sudo chmod 666 /home/ec2-user/ansible.log
-echo "source_repo=$GIT_URL" >> /home/ec2-user/ami_info.txt
-echo "commit_hash=$GIT_COMMIT" >> /home/ec2-user/ami_info.txt
-echo "build=$JOB_NAME" >> /home/ec2-user/ami_info.txt
-echo "build_number=$BUILD_NUMBER" >> /home/ec2-user/ami_info.txt
-echo "build_url=$BUILD_URL" >> /home/ec2-user/ami_info.txt
+sudo mkdir -p /var/inin
+sudo echo "source_repo=$GIT_URL" >> /var/inin/base_ami_info.txt
+sudo echo "commit_hash=$GIT_COMMIT" >> /var/inin/base_ami_info.txt
+sudo echo "build=$JOB_NAME" >> /var/inin/base_ami_info.txt
+sudo echo "build_number=$BUILD_NUMBER" >> /var/inin/base_ami_info.txt
+sudo echo "build_url=$BUILD_URL" >> /var/inin/base_ami_info.txt
