@@ -29,7 +29,7 @@
       "role"               : "{{ user `role` }}-packer"
     },
     "tags": {
-      "Name"               : "base-packer",
+      "Name"               : "{{ user `role` }}",
       "role"               : "{{ user `role` }}",
       "owner"              : "devops-cloudapplications@inin.com",
       "type"               : "ebs",
