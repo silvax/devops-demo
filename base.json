@@ -15,7 +15,7 @@
     "source_ami": "{{user `sourceami`}}",
     "instance_type": "m3.medium",
     "ssh_username": "ec2-user",
-    "ami_name" : "{{user `role`}}-instance-store {{isotime | clean_ami_name}}",
+    "ami_name" : "{{user `role`}}-ebs {{isotime | clean_ami_name}}",
     "ssh_timeout": "5m",
     "iam_instance_profile": "default",
     "enhanced_networking": true,
