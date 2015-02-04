@@ -30,7 +30,7 @@
       "role"               : "{{ user `role` }}",
       "owner"              : "devops-cloudapplications@inin.com",
       "type"               : "ebs",
-      "sourceami"          : "{{ user `sourceami` }}",
+      "source_ami"         : "{{ user `sourceami` }}",
       "source_repo"        : "{{ user `source_repo` }}",
       "source_commit_hash" : "{{ user `source_commit_hash` }}",
       "build"              : "{{ user `build` }}",
@@ -56,9 +56,9 @@
       "script": "packer.sh"
     },
     {
-        "type": "ansible-local",
-        "playbook_file": "base/build.yml",
-        "playbook_dir": "base"
+      "type": "ansible-local",
+      "playbook_file": "base/build.yml",
+      "playbook_dir": "base"
     }
   ]
 }
