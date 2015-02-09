@@ -6,4 +6,6 @@ newrelic_license_key: 342b237cab111f8b89ad2614e1f3f2d12fd56edd
 newrelic_suffix:
 sumologicaccessid: suKXEnfW9MFxYf
 sumologicaccesskey: AURJxd2HTLMLP51zIlAqfwmVafcARLkmeN9CWbtpOH6xEpqJGSV3S9EQgxvYlrob
+TrendMicroTenantID: 46D68589-858E-C454-E0CF-683F299F7D58
+TrendMicroTenantPassword: 25D583C3-E139-5F07-F668-F159EF2B6A2E
 servicediscoveryurl: http://service-discovery-prod.infrastructure.inintca.com/prod-apse2/service.discovery.properties

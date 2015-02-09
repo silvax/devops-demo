@@ -17,6 +17,8 @@
     "bundle_prefix"   : "inin-{{user `role`}}-{{timestamp}}",
     "account_id"      : "490606849374",
     "source_ami"      : "{{user `sourceami`}}",
+    "access_key"      : "AKIAJSA7XBUA5XDUEQQA",
+    "secret_key"      : "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",
     "instance_type"   : "{{user `instance_type`}}",
     "iam_instance_profile": "default",
     "ssh_username"    : "ec2-user",
