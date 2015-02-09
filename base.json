@@ -32,7 +32,6 @@
       "Name"               : "{{ user `role` }}",
       "role"               : "{{ user `role` }}",
       "owner"              : "devops-cloudapplications@inin.com",
-      "type"               : "ebs",
       "source_ami"         : "{{ user `sourceami` }}",
       "source_repo"        : "{{ user `source_repo` }}",
       "source_commit_hash" : "{{ user `source_commit_hash` }}",
