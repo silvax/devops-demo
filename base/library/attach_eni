@@ -1,0 +1,76 @@
+#!/usr/bin/env python
+
+from boto import ec2
+from boto import utils
+from ansible.module_utils.basic import *
+
+DOCUMENTATION = '''
+module: attach_eni
+short_description: Attach a second network interface.
+description:
+    - Will create an ENI if one does not exist and attach to the instance running the module. The ENI will only have a private ip.
+version_added: "1.0"
+author: mattl.smith@inin.com
+notes:
+    - The module will return the ENI ID and the private ip address if you register the output of the module.
+requirements:
+    - must pass in hostname. Recommened is {{ opsworks.instance.hostname }}
+
+'''
+
+# Get instance's meta data
+meta = utils.get_instance_metadata()
+
+module = AnsibleModule(
+    argument_spec = dict(
+    state     = dict(default='present'),
+    hostname  = dict(required=True),
+    )
+)
+
+# Setting ansible module arguments
+hostname = module.params['hostname']
+
+#Set metadata variables
+region = meta['placement']['availability-zone'][:-1]
+availability_zone = meta['placement']['availability-zone']
+ami_id = meta['instance-id']
+sg_list =  meta['security-groups']
+
+#Lookup primary network interface and get the security groups associated. The same groups will be added to the new interface
+meta_interface_keys = meta['network']['interfaces']['macs'].keys()
+meta_interface_device0= meta['network']['interfaces']['macs'][meta_interface_keys[0]]
+subnet_id= meta_interface_device0['subnet-id']
+vpc_id = meta_interface_device0['vpc-id']
+
+#Connect to ec2 region
+c = ec2.connect_to_region(region)
+
+#Loop through metadata security groups to be used with new interface
+sg_ids = []
+for sg in sg_list:
+    sg_name = c.get_all_security_groups(filters={"group-name":sg,"vpc-id":vpc_id})
+    sg_id = sg_name[0].id
+    sg_ids.append(sg_id)
+
+
+
+# Get ENI (if one exists)
+e = c.get_all_network_interfaces(filters={"tag:Opsworks_ENI" : hostname,"availability-zone":availability_zone })
+
+try:
+    #Check to see if interface is already created, if so attach or exit if already attached
+    eni = e[0].id
+    if c.get_all_network_interfaces(network_interface_ids=eni,filters={"status":"available","availability-zone":availability_zone}):
+        interface = c.attach_network_interface(network_interface_id=eni,instance_id=ami_id,device_index=1)
+        module.exit_json(change=True, eni_id=e[0].id, eni_private_ip=e[0].private_ip_address)
+    else:
+    #Exit if already attached
+        private_ip = e[0].private_ip_address
+        module.exit_json(msg="ENI already exists and is attached", eni_id=e[0].id, eni_private_ip=private_ip)
+except IndexError:
+    #Create new interface using meta data from above and attach
+    eni = c.create_network_interface(subnet_id=subnet_id,description="Opsworks Instance " + hostname,groups=sg_ids)
+    new_tag = c.create_tags(resource_ids=eni.id,tags={"Opsworks_ENI":hostname})
+    interface = c.attach_network_interface(network_interface_id=eni.id,instance_id=ami_id,device_index=1)
+    module.exit_json(changed=True,eni_id=eni.id,eni_private_ip=eni.private_ip_address)
