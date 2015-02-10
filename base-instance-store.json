@@ -1,11 +1,14 @@
 {
   "variables": {
-    "source_ami"          : "ami-0268d56a",
-    "region"              : "us-east-1",
+    "sourceami"           : "ami-0268d56a",
     "role"                : "base",
-    "environment"         : "dev",
     "virtualization_type" : "hvm",
-    "instance_type"       : "m3.medium"
+    "instance_type"       : "m3.medium",
+    "source_repo"         : "{{ env `GIT_URL` }}",
+    "source_commit_hash"  : "{{ env `GIT_COMMIT` }}",
+    "build"               : "{{ env `JOB_NAME` }}",
+    "build_number"        : "{{ env `BUILD_NUMBER` }}",
+    "build_url"           : "{{ env `BUILD_URL` }}"
   },
   "builders": [{
     "type"            : "amazon-instance",
@@ -13,18 +16,31 @@
     "s3_bucket"       : "inin-custom-amis",
     "bundle_prefix"   : "inin-{{user `role`}}-{{timestamp}}",
     "account_id"      : "490606849374",
-    "source_ami"      : "{{user `source_ami`}}",
+    "source_ami"      : "{{user `sourceami`}}",
     "access_key"      : "AKIAJSA7XBUA5XDUEQQA",
     "secret_key"      : "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",
     "instance_type"   : "{{user `instance_type`}}",
     "iam_instance_profile": "default",
     "ssh_username"    : "ec2-user",
     "ssh_timeout"     : "5m",
-    "ami_name"        : "{{user `role`}} {{user `virtualization_type`}} instance-store {{isotime | clean_ami_name}}",
-    "ami_description" : "{{user `role`}} {{user `virtualization_type`}} instance-store {{isotime | clean_ami_name}}",
+    "ami_name"        : "{{user `role`}}-{{user `virtualization_type`}}-instance-store {{isotime | clean_ami_name}}",
     "x509_cert_path"  : "certs/devops-dev.crt",
     "x509_key_path"   : "certs/devops-dev.key",
-    "run_tags"        : { "Name" : "{{user `role`}}_packer_instance_store" },
+    "run_tags": {
+      "Name"               : "{{ user `role` }}-packer",
+      "role"               : "{{ user `role` }}-packer"
+    },
+    "tags": {
+      "Name"               : "{{ user `role` }}",
+      "role"               : "{{ user `role` }}",
+      "owner"              : "devops-cloudapplications@inin.com",
+      "source_ami"         : "{{ user `sourceami` }}",
+      "source_repo"        : "{{ user `source_repo` }}",
+      "source_commit_hash" : "{{ user `source_commit_hash` }}",
+      "build"              : "{{ user `build` }}",
+      "build_number"       : "{{ user `build_number` }}",
+      "build_url"          : "{{ user `build_url` }}"
+    },
     "ami_virtualization_type" : "{{user `virtualization_type`}}",
     "enhanced_networking"     : true,
     "vpc_id": "vpc-ba514bd8",
@@ -41,21 +57,12 @@
     },
     {
       "type": "shell",
-      "inline": [
-        "sudo yum install python-pip -y",
-        "sudo pip install ansible==1.7.1",
-        "sudo mkdir -p /etc/ansible",
-        "sudo chown ec2-user:ec2-user /etc/ansible",
-        "sudo mv /home/ec2-user/base/ansible.cfg /etc/ansible/ansible.cfg",
-        "sudo chown ec2-user:ec2-user /etc/ansible/ansible.cfg",
-        "sudo touch /home/ec2-user/ansible.log",
-        "sudo chown ec2-user:ec2-user /home/ec2-user/ansible.log",
-        "sudo chmod 666 /home/ec2-user/ansible.log"
-    ]},
+      "script": "packer.sh"
+    },
     {
-        "type": "ansible-local",
-        "playbook_file": "base/build.yml",
-        "playbook_dir": "base"
+      "type": "ansible-local",
+      "playbook_file": "base/build.yml",
+      "playbook_dir": "base"
     }
   ]
 }
