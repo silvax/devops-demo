@@ -81,7 +81,7 @@
      - sumologic-configure
      - service-discovery
 
-  - hosts : Ebs
+  - hosts : ebs
     sudo: true
 
     roles:
