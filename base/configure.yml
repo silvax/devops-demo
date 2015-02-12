@@ -65,6 +65,7 @@
     sudo: true
 
     roles:
+     - jumpcloud-configure
      - newrelic-configure
      - newrelicjava-configure
      - newrelicnode-configure
@@ -75,6 +76,7 @@
     sudo: true
 
     roles:
+     - jumpcloud-configure
      - newrelic-configure
      - newrelicjava-configure
      - newrelicnode-configure
