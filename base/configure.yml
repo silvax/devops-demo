@@ -65,6 +65,7 @@
     sudo: true
 
     roles:
+     - jumpcloud-configure
      - newrelic-configure
      - newrelicjava-configure
      - newrelicnode-configure
@@ -75,13 +76,14 @@
     sudo: true
 
     roles:
+     - jumpcloud-configure
      - newrelic-configure
      - newrelicjava-configure
      - newrelicnode-configure
      - sumologic-configure
      - service-discovery
 
-  - hosts : Ebs
+  - hosts : ebs
     sudo: true
 
     roles:
