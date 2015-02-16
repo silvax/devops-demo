@@ -63,6 +63,7 @@ for sg in sg_list:
 
 # Check if ENI is already created for this instance.
 e = c.get_all_network_interfaces(filters={"tag:Opsworks_ENI" : hostname,"availability-zone":availability_zone })
+# There should only be one interface found. If more then one is found there is no way to pick which one so we will exit w/ error
 if len(e) > 1:
     module.fail_json(msg="ERROR: Multiple interfaces found in %s availability-zone. There should only be one" % availability_zone)
 
