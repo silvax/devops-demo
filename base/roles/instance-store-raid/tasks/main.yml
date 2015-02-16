@@ -14,5 +14,5 @@
     register: md0_created
 
   - name: create raid 0 with disks availabe
-    shell: "yes|mdadm --create --verbose /dev/md0 --level=stripe --raid-devices={{ pvs_list|length }} {{ pvs_list|join (' ') }}"
+    shell: "yes|mdadm --create --verbose /dev/md0 --level=stripe --force --raid-devices={{ pvs_list|length }} {{ pvs_list|join (' ') }}"
     when: md0_created.rc != 0
