@@ -1,0 +1,116 @@
+#!/usr/bin/env python
+
+import time
+from boto import ec2
+from boto import utils
+from ansible.module_utils.basic import *
+
+DOCUMENTATION = '''
+module: attach_eni
+short_description: Attach a second network interface.
+description:
+    - Will create an ENI if one does not exist and attach to the instance running the module. The ENI will only have a private ip.
+version_added: "1.0"
+author: mattl.smith@inin.com
+notes:
+    - The module will return the ENI ID and the private ip address if you register the output of the module.
+requirements:
+    - must pass in hostname. Recommened is {{ opsworks.instance.hostname }}
+
+'''
+
+module = AnsibleModule(
+    argument_spec = dict(
+    state     = dict(default='present'),
+    hostname  = dict(required=True),
+    )
+)
+
+# Get instance's meta data
+meta = utils.get_instance_metadata()
+if len(meta) == 0:
+    module.fail_json(msg="ERROR: no meta data found")
+
+# Setting ansible module arguments
+hostname = module.params['hostname']
+
+# Set metadata variables
+region = meta['placement']['availability-zone'][:-1]
+availability_zone = meta['placement']['availability-zone']
+instance_id = meta['instance-id']
+sg_list =  meta['security-groups']
+
+# Lookup primary network interface and get the security groups associated. The same groups will be added to the new interface
+meta_interface_keys = meta['network']['interfaces']['macs'].keys()
+meta_interface_device0= meta['network']['interfaces']['macs'][meta_interface_keys[0]]
+subnet_id= meta_interface_device0['subnet-id']
+vpc_id = meta_interface_device0['vpc-id']
+
+#Connect to ec2 region
+c = ec2.connect_to_region(region)
+
+sg_ids = []
+# If the metadata returned a string, convert it to an list
+if type(sg_list) == str:
+    sg_list = [sg_list]
+#Loop through metadata security groups to be used with new interface
+for sg in sg_list:
+    sg_name = c.get_all_security_groups(filters={"group-name":sg,"vpc-id":vpc_id})
+    sg_id = sg_name[0].id
+    sg_ids.append(sg_id)
+
+
+
+# Check if ENI is already created for this instance.
+e = c.get_all_network_interfaces(filters={"tag:Ansible_ENI" : hostname,"availability-zone":availability_zone })
+# There should only be one interface found. If more then one is found there is no way to pick which one so we will exit w/ error
+if len(e) > 1:
+    module.fail_json(msg="ERROR: Multiple interfaces found in %s availability-zone. There should only be one" % availability_zone)
+
+try:
+    eni = e[0].id
+    # ENI exists, checking to see if it's attached or not
+    if c.get_all_network_interfaces(network_interface_ids=eni,filters={"status":"available","availability-zone":availability_zone}):
+        # Retrying for attaching network interface
+        for i in range(0,10):
+            try:
+                interface = c.attach_network_interface(network_interface_id=eni,instance_id=instance_id,device_index=1)
+            except:
+                if i == 10:
+                    module.fail_json(msg="ERROR: Attaching inteface timed out", eni_id=e[0].id, eni_private_ip=e[0].private_ip_address)
+                else:
+                    time.sleep(2) #Sleep for 2 seconds before retrying
+                    continue
+        module.exit_json(change=True, msg="SUCCESS: Attached existing ENI", eni_id=e[0].id, eni_private_ip=e[0].private_ip_address)
+    else:
+    #Exit if already attached
+        private_ip = e[0].private_ip_address
+        module.exit_json(msg="SUCESS: ENI already exists and is attached", eni_id=e[0].id, eni_private_ip=private_ip)
+except IndexError:
+    # Create new interface using meta data from above and attach
+    try:
+        eni = c.create_network_interface(subnet_id=subnet_id,description="Ansible ENI Instance " + hostname,groups=sg_ids)
+    except:
+        module.fail_json(msg="ERROR: Unable to create new ENI")
+    # Fix for bug where eni object returns but is not available for modification. While loop waits for 20 seconds before quitting.
+    for i in range(0,10):
+        try:
+            new_tag = c.create_tags(resource_ids=eni.id,tags={"Ansible_ENI":hostname})
+        except:
+            if i == 10:
+                module.fail_json(msg="ERROR: Timeout while creating tags for %s" % eni.id)
+            else:
+                time.sleep(2) #Sleep for 2 seconds before retrying
+                continue
+        break
+    # Retrying for 20 seconds to attach the interface
+    for i in range(0,10):
+            try:
+                interface = c.attach_network_interface(network_interface_id=eni.id,instance_id=instance_id,device_index=1)
+            except:
+                if i == 10:
+                    module.fail_json(msg="ERROR: Attaching inteface timed out", eni_id=e[0].id, eni_private_ip=e[0].private_ip_address)
+                else:
+                    time.sleep(2) #Sleep for 2 seconds before retrying
+                    continue
+            module.exit_json(changed=True, msg="SUCCESS: New ENI created and attached", eni_id=eni.id,eni_private_ip=eni.private_ip_address)
