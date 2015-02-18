@@ -62,7 +62,7 @@ for sg in sg_list:
 
 
 # Check if ENI is already created for this instance.
-e = c.get_all_network_interfaces(filters={"tag:Opsworks_ENI" : hostname,"availability-zone":availability_zone })
+e = c.get_all_network_interfaces(filters={"tag:Ansible_ENI" : hostname,"availability-zone":availability_zone })
 # There should only be one interface found. If more then one is found there is no way to pick which one so we will exit w/ error
 if len(e) > 1:
     module.fail_json(msg="ERROR: Multiple interfaces found in %s availability-zone. There should only be one" % availability_zone)
@@ -89,13 +89,13 @@ try:
 except IndexError:
     # Create new interface using meta data from above and attach
     try:
-        eni = c.create_network_interface(subnet_id=subnet_id,description="Opsworks Instance " + hostname,groups=sg_ids)
+        eni = c.create_network_interface(subnet_id=subnet_id,description="Ansible ENI Instance " + hostname,groups=sg_ids)
     except:
         module.fail_json(msg="ERROR: Unable to create new ENI")
     # Fix for bug where eni object returns but is not available for modification. While loop waits for 20 seconds before quitting.
     for i in range(0,10):
         try:
-            new_tag = c.create_tags(resource_ids=eni.id,tags={"Opsworks_ENI":hostname})
+            new_tag = c.create_tags(resource_ids=eni.id,tags={"Ansible_ENI":hostname})
         except:
             if i == 10:
                 module.fail_json(msg="ERROR: Timeout while creating tags for %s" % eni.id)
