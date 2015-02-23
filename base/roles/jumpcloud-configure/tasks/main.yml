@@ -16,7 +16,7 @@
 
 - service: name=jcagent state=started enabled=yes
 
-- gem: name=jumpcloud version=0.3.0 user_install=yes state=present
+- gem: name=jumpcloud version=0.4.0 user_install=yes state=present
 
 - service: name=jumpcloud state=started enabled=yes
 
