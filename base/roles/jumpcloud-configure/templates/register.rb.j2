@@ -9,8 +9,13 @@ log = Logger.new('/opt/jc/registration.log')
 begin
   retries ||= 3
   sleep(15)
-  JumpCloud.set_system_tags("{{ allTags.tags.environment }}")
-  JumpCloud.set_sshPassEnabled()
+  jc = JumpCloud.new()
+  jc.update_settings({
+	"allowSshPasswordAuthentication" => true,
+	"allowPublicKeyAuthentication" => true,
+	"allowSshRootLogin" => false,
+	"tags" => ["{{ allTags.tags.environment }}"]
+  })
   data = JumpCloud.get_system_data()
 
   while data["tags"].length < 1 do
