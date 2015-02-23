@@ -27,4 +27,4 @@
 - template: src=sumo.conf.j2 dest=/etc/sumo.conf owner=root group=root mode=0644
 
 - name: Enable SumoCollector service
-  service: name=collector enabled=yes state=restarted
+  service: name=collector enabled=yes state=started
