@@ -1,6 +1,6 @@
 {
   "variables": {
-    "sourceami"           : "ami-08842d60",
+    "sourceami"           : "ami-146e2a7c",
     "role"                : "base",
     "instance_type"       : "m3.medium",
     "source_repo"         : "{{ env `GIT_URL` }}",

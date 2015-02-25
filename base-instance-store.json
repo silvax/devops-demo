@@ -1,6 +1,6 @@
 {
   "variables": {
-    "sourceami"           : "ami-0268d56a",
+    "sourceami"           : "ami-ea6e2a82",
     "role"                : "base",
     "virtualization_type" : "hvm",
     "instance_type"       : "m3.medium",
