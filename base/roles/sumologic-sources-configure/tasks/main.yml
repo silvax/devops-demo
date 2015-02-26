@@ -1,0 +1,28 @@
+---
+# Configure the SumoLogic collector.
+# This role can be called by service playbooks in order to 
+# override the default sumologic sources. By default all sources
+# are configured, which creates a lot of unused sources in most cases, so 
+# in general you'll want to call this role to override that. See defaults/main.yml
+# for a list of all the sources. 
+#
+# Example usage:
+#
+# For tomcat services:
+#   - { role: sumologic-sources-configure, sumo_sources_tomcat: True }
+# 
+# For Spring Boot services:
+#   - { role: sumologic-sources-configure, sumo_sources_supervisor: True, sumo_sources_inin: True }
+
+
+# tasks file for new sumo
+- name: gather ec2 facts
+  action: ec2_facts
+
+- name: get environment tag
+  action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
+  register: allTags
+
+- template: src=sources.json.j2 dest=/opt/SumoCollector/sources.json owner=root group=root mode=0644
+
+

@@ -1,0 +1,3 @@
+---
+dependencies:
+  - {role: sumologic-sources-configure, sumo_sources_all: True }

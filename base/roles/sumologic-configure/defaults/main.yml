@@ -1,12 +1,2 @@
 ---
-sumo_sources_all: True
-sumo_sources_tomcat: False
-sumo_sources_inin: False
-sumo_sources_supervisor: False
-sumo_sources_jetty: False
-sumo_sources_kafka: False
-sumo_sources_zookeeper: False
-sumo_sources_mongo: False
-sumo_sources_nginx: False
-sumo_sources_haproxy: False
-sumo_sources_es: False
+
