@@ -1,0 +1,23 @@
+#!/bin/bash
+EC2_HOME=/opt/aws/apitools/ec2
+
+REGION=`curl http://169.254.169.254/latest/dynamic/instance-identity/document |grep region|awk -F\" '{print $4}'`
+INSTANCE_ID=`curl http://169.254.169.254/latest/meta-data/instance-id/`
+
+aws ec2 create-tags --tags Key='Name',Value={{ role }} --resources $INSTANCE_ID --region $REGION
+
+aws ec2 create-tags --tags Key='role',Value={{ role }} --resources $INSTANCE_ID --region $REGION
+
+aws ec2 create-tags --tags Key='{{ role }}_version',Value={{ version }} --resources $INSTANCE_ID --region $REGION
+
+# The AMI we are currently running
+AMI_ID=`curl http://169.254.169.254/latest/meta-data/ami-id`
+
+# Our ansible-base AMI is tagged with data to propagate to the instances
+ec2-describe-tags --filter "resource-id=$AMI_ID" > /home/ec2-user/ami_tags
+
+SOURCE_AMI=`grep source_ami /home/ec2-user/ami_tags | cut -f5`
+[ ! -z "$SOURCE_AMI" ] && aws ec2 create-tags --tags Key='source_ami',Value=$SOURCE_AMI --resources $INSTANCE_ID --region $REGION
+
+OWNER=`grep owner /home/ec2-user/ami_tags | cut -f5`
+[ ! -z "$OWNER" ] && aws ec2 create-tags --tags Key='owner',Value="$OWNER" --resources $INSTANCE_ID --region $REGION
