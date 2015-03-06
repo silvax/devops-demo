@@ -1,0 +1,11 @@
+---
+# tasks for tagging instance
+
+  # - file: path='/home/ec2-user/.bin/' state=directory
+
+  - name: template tagging script
+    template: src=tagbase.sh.j2 dest=/opt/tagbase.sh owner=root group=root mode=0755
+    register: result
+
+  - name: add the script to the rc.local
+    shell: echo /opt/tagbase.sh >> /etc/rc.local

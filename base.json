@@ -39,6 +39,11 @@
       "build_number"       : "{{ user `build_number` }}",
       "build_url"          : "{{ user `build_url` }}"
     },
+    "run_tags": {
+      "Name": "base-packer",
+      "role": "base-packer",
+      "builder": "base-packer"
+    },
     "ami_block_device_mappings": [
       {
           "device_name": "/dev/sdo",
