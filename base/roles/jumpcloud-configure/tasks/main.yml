@@ -1,6 +1,10 @@
 ---
 # tasks file for jumpcloud
 
+- service: name=jcagent state=started enabled=yes
+
+- service: name=jumpcloud state=started enabled=yes
+
 - name: gather ec2 facts
   action: ec2_facts
 
@@ -8,22 +12,12 @@
   action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
   register: allTags
 
-- command: /opt/kickstart.sh creates=/opt/jc/
-
 - template: src=register.rb.j2 dest=/opt/jc/register.rb mode=0755
 
 - copy: src=delete.rb dest=/opt/jc/delete.rb mode=0755
 
-- service: name=jcagent state=started enabled=yes
-
-- gem: name=jumpcloud version=0.4.0 user_install=yes state=present
-
-- service: name=jumpcloud state=started enabled=yes
-
 - command: 'ruby /opt/jc/register.rb'
   ignore_errors: yes
-
-#- shell: echo '/opt/remove-ec2-user.sh' >>/etc/rc.d/rc.local
 
 - authorized_key: key="{{ key_to_remove }}" user=ec2-user state=absent
   when: remove_key == true

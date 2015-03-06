@@ -8,7 +8,6 @@ log = Logger.new('/opt/jc/registration.log')
 
 begin
   retries ||= 5
-  sleep(45)
   jc = JumpCloud.new()
   jc.update_settings({
 	"allowSshPasswordAuthentication" => true,
@@ -30,6 +29,7 @@ begin
     f.write(data)
   end
 rescue => err
+  sleep(45)
   retries -= 1
   log.debug(retries)
   log.debug(err)
