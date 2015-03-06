@@ -13,6 +13,8 @@
 
 - service: name=jumpcloud state=stopped enabled=no
 
+- service: name=jcagent state=stopped enabled=no
+
 - gem: name=jumpcloud version=0.4.0 user_install=yes state=present
 
 - name: template remove-ec2-user script

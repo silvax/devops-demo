@@ -1,9 +1,9 @@
 ---
 # tasks file for jumpcloud
 
-- service: name=jcagent state=started enabled=yes
+- service: name=jcagent state=restarted enabled=yes
 
-- service: name=jumpcloud state=started enabled=yes
+- service: name=jumpcloud enabled=yes
 
 - name: gather ec2 facts
   action: ec2_facts
