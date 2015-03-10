@@ -8,9 +8,9 @@ log = Logger.new('/opt/jc/registration.log')
 
 begin
   retries ||= 5
-  sleep(45)
   jc = JumpCloud.new()
   jc.update_settings({
+  "displayName" => "{{ allTags.tags.role }}-{{ ansible_ec2_local_ipv4|replace(".", "-") }}",
 	"allowSshPasswordAuthentication" => true,
 	"allowPublicKeyAuthentication" => true,
 	"allowSshRootLogin" => false,
@@ -30,6 +30,7 @@ begin
     f.write(data)
   end
 rescue => err
+  sleep(45)
   retries -= 1
   log.debug(retries)
   log.debug(err)

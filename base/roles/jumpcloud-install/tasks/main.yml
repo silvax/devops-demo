@@ -9,7 +9,13 @@
 
 - copy: src=jumpcloud dest=/etc/init.d/jumpcloud mode=0755
 
+- command: /opt/kickstart.sh creates=/opt/jc/
+
 - service: name=jumpcloud state=stopped enabled=no
+
+- service: name=jcagent state=stopped enabled=no
+
+- gem: name=jumpcloud version=0.4.0 user_install=yes state=present
 
 - name: template remove-ec2-user script
   template: src=remove-ec2-user.sh.j2 dest=/opt/remove-ec2-user.sh owner=root group=root mode=0755
