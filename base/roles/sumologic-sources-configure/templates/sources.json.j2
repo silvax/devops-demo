@@ -18,6 +18,14 @@
       "pathExpression": "/var/log/tomcat7/catalina.out",
       "timeZone": "UTC"
     },
+    {
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/appsumo",
+      "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
+      "sourceType": "LocalFile",
+      "multilineProcessingEnabled": false,
+      "pathExpression": "/var/log/tomcat7/*sumo.log",
+      "timeZone": "UTC"
+    },
 {% endif %}
 {% if sumo_sources_all or sumo_sources_inin %}
     {
