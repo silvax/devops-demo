@@ -3,4 +3,4 @@
 
 - yum: name=ds_agent state=latest
 
-- service: name=ds_agent enabled=no state=stopped
+- service: name=ds_agent enabled=yes state=started
