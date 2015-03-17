@@ -27,11 +27,10 @@ common: &default_settings
   # For example, to report data to "My Application" and "My Application 2" use this:
   # app_name: My Application;My Application 2
   # This setting is required.
-{% set app_name = allTags.tags.role if opsworks.stack.name is none else opsworks.stack.name + "-" + allTags.tags.role  %}
 {% if newrelic_suffix is not none %}
-  app_name: {{ app_name }} {{ newrelic_suffix }}
+  app_name: {{ newrelic_role }} {{ newrelic_suffix }}
 {% else %}
-  app_name: {{ app_name }};{{ app_name }} ({{ ansible_ec2_placement_region }})
+  app_name: {{ newrelic_role }};{{ newrelic_role }} ({{ ansible_ec2_placement_region }})
 {% endif %}
 
   # To enable high security, set this property to true. When in high

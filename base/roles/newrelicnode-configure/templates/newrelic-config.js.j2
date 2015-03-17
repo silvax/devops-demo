@@ -10,9 +10,9 @@ exports.config = {
    * Array of application names.
    */
 {% if newrelic_suffix is not none %}
-  app_name : ['{{ allTags.tags.role }} {{ newrelic_suffix }}'],
+  app_name : ['{{ newrelic_role }} {{ newrelic_suffix }}'],
 {% else %}
-  app_name : ['{{ allTags.tags.role }}', '{{ allTags.tags.role }} ({{ ansible_ec2_placement_region }})'],
+  app_name : ['{{ newrelic_role }}', '{{ newrelic_role }} ({{ ansible_ec2_placement_region }})'],
 {% endif %}
 
   /**
