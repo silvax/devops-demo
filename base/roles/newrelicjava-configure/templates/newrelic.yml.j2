@@ -27,6 +27,11 @@ common: &default_settings
   # For example, to report data to "My Application" and "My Application 2" use this:
   # app_name: My Application;My Application 2
   # This setting is required.
+  # We have a couple different naming schemes at work:
+  #   * For opsworks stacks newrelic_role will contain both the stack and role names. Example: kafka-kafka
+  #   * For non-opsworks newrelic_role will be just the role name. Example: conversation
+  #   * In production we have two apps for every app: one that is a rollup for all regions and one that is region specific: Example: conversation and conversation (us-east-1)
+  #   * In lower environments we have only one app for every app since there is only one region and we suffix it with the environment. Example: conversation (Development)
 {% if newrelic_suffix is not none %}
   app_name: {{ newrelic_role }} {{ newrelic_suffix }}
 {% else %}
