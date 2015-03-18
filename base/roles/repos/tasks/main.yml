@@ -27,6 +27,6 @@
 
 - name: inin repository enable for env
   ini_file: dest=/etc/yum.repos.d/inin.repo
-            section=inin_{{ allTags.tags.environment | default('dev') }}
+            section=inin_dev
             option=enabled
             value=1
