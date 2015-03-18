@@ -1,5 +1,5 @@
 #!/bin/bash
-EC2_HOME=/opt/aws/apitools/ec2
+source /etc/profile
 
 REGION=`curl http://169.254.169.254/latest/dynamic/instance-identity/document |grep region|awk -F\" '{print $4}'`
 INSTANCE_ID=`curl http://169.254.169.254/latest/meta-data/instance-id/`
@@ -21,3 +21,6 @@ SOURCE_AMI=`grep source_ami /home/ec2-user/ami_tags | cut -f5`
 
 OWNER=`grep owner /home/ec2-user/ami_tags | cut -f5`
 [ ! -z "$OWNER" ] && aws ec2 create-tags --tags Key='owner',Value="$OWNER" --resources $INSTANCE_ID --region $REGION
+
+# Suppress any non-zero return value from the above two commands and log that tagging finished
+echo "Tagging finished."

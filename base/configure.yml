@@ -35,52 +35,28 @@
       - instance-store-raid
       - instance-store-volumes
 
-  - hosts: stage
+  - hosts: all
     sudo: true
-
+    
     roles:
+     - tagbase-configure
      - jumpcloud-configure
      - newrelic-configure
      - newrelicjava-configure
      - newrelicnode-configure
      - sumologic-configure
+
+  - hosts: stage:prod:prod-apse2
+    sudo: true
+
+    roles:
      - ossec-configure
      - alertlogic-configure
-     - service-discovery
 
-  - hosts: prod:prod-apse2
+  - hosts: all
     sudo: true
-
+    
     roles:
-     - jumpcloud-configure
-     - newrelic-configure
-     - newrelicjava-configure
-     - newrelicnode-configure
-     - sumologic-configure
-     - ossec-configure
-     - alertlogic-configure
-     - service-discovery
-
-  - hosts: dev
-    sudo: true
-
-    roles:
-     - jumpcloud-configure
-     - newrelic-configure
-     - newrelicjava-configure
-     - newrelicnode-configure
-     - sumologic-configure
-     - service-discovery
-
-  - hosts: test
-    sudo: true
-
-    roles:
-     - jumpcloud-configure
-     - newrelic-configure
-     - newrelicjava-configure
-     - newrelicnode-configure
-     - sumologic-configure
      - service-discovery
 
   - hosts : ebs
