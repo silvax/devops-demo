@@ -2,6 +2,10 @@
   - hosts: all
     sudo: true
 
+    roles:
+      # This must come first so that the role tag is set.
+      - tagbase-configure
+
     tasks:
       - name: gather ec2 facts
         action: ec2_facts
@@ -39,7 +43,6 @@
     sudo: true
     
     roles:
-     - tagbase-configure
      - jumpcloud-configure
      - newrelic-configure
      - newrelicjava-configure
