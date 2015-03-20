@@ -47,3 +47,6 @@
 - alternatives: name=javadoc link=/usr/bin/javadoc path=/usr/java/jdk{{ ver }}/bin/javadoc
 
 - alternatives: name=javaws link=/usr/bin/javaws path=/usr/java/jdk{{ ver }}/bin/javaws
+
+# This makes JAVA_HOME get set on EC2 login shells so the aws tools work:
+- alternatives: name=jvm link=/usr/lib/jvm/java path=/usr/java/jdk{{ ver }}
