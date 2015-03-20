@@ -1,4 +1,4 @@
 ---
-# tasks file for jumpcloud
+# tasks file for TrendMicro
 
-- command: '/opt/ds_agent/dsa_control -a dsm://agents.deepsecurity.trendmicro.com:443/ "tenantID:{{ TrendMicroTenantID }}" "tenantPassword:{{ TrendMicroTenantPassword }}"'
+- command: '/opt/ds_agent/dsa_control -a dsm://agents.deepsecurity.trendmicro.com:443/ "tenantID:{{ TrendMicroTenantID }}" "tenantPassword:{{ TrendMicroTenantPassword }}" "policyid:{{ TrendMicroPolicyID }}"
