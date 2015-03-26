@@ -4,11 +4,19 @@ source /etc/profile
 REGION=`curl http://169.254.169.254/latest/dynamic/instance-identity/document |grep region|awk -F\" '{print $4}'`
 INSTANCE_ID=`curl http://169.254.169.254/latest/meta-data/instance-id/`
 
-aws ec2 create-tags --tags Key='Name',Value={{ role }} --resources $INSTANCE_ID --region $REGION
+# check if this instance is running in opsworks
+sudo opsworks-agent-cli get_json
 
-aws ec2 create-tags --tags Key='role',Value={{ role }} --resources $INSTANCE_ID --region $REGION
+if [ $? -eq 0 ]
+then
+  aws ec2 create-tags --tags Key='Name',Value={{ role }} --resources $INSTANCE_ID --region $REGION
 
-aws ec2 create-tags --tags Key='{{ role }}_version',Value={{ version }} --resources $INSTANCE_ID --region $REGION
+  aws ec2 create-tags --tags Key='role',Value={{ role }} --resources $INSTANCE_ID --region $REGION
+
+  aws ec2 create-tags --tags Key='{{ role }}_version',Value={{ version }} --resources $INSTANCE_ID --region $REGION
+else
+  echo "Instance is in opsworks role tag will not be applied"
+fi
 
 # The AMI we are currently running
 AMI_ID=`curl http://169.254.169.254/latest/meta-data/ami-id`
