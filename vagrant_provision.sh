@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo yum install python-pip -y
+sudo easy_install pip
 sudo pip install ansible==1.7.1
 sudo mkdir -p /etc/ansible
 sudo mv /home/ec2-user/base/ansible.cfg /etc/ansible/ansible.cfg

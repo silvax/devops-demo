@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo yum install python-pip -y
+sudo easy_install pip
 sudo pip install ansible==1.7.1
 sudo mkdir -p /etc/ansible
 sudo chown ec2-user:ec2-user /etc/ansible
