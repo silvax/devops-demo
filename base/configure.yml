@@ -41,7 +41,7 @@
 
   - hosts: all
     sudo: true
-    
+
     roles:
      - jumpcloud-configure
      - newrelic-configure
@@ -49,16 +49,23 @@
      - newrelicnode-configure
      - sumologic-configure
 
-  - hosts: stage:prod:prod-apse2
+  - hosts: test:stage:prod
     sudo: true
 
     roles:
      - ossec-configure
      - alertlogic-configure
 
+  - hosts: prod-apse2
+    sudo: true
+
+    roles:
+    - ossec-configure
+    - alertlogic-configure
+
   - hosts: all
     sudo: true
-    
+
     roles:
      - service-discovery
 
