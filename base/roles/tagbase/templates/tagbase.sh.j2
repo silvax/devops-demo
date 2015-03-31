@@ -7,7 +7,7 @@ INSTANCE_ID=`curl http://169.254.169.254/latest/meta-data/instance-id/`
 # check if this instance is running in opsworks
 sudo opsworks-agent-cli get_json
 
-if [ $? -eq 0 ]
+if [ $? -ne 0 ]
 then
   aws ec2 create-tags --tags Key='Name',Value={{ role }} --resources $INSTANCE_ID --region $REGION
 
