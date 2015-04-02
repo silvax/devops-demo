@@ -61,7 +61,6 @@
 
     roles:
     - ossec-configure
-    - alertlogic-configure
 
   - hosts: all
     sudo: true
