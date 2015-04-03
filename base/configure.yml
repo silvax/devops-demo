@@ -48,6 +48,7 @@
      - newrelicjava-configure
      - newrelicnode-configure
      - sumologic-configure
+     - service-discovery
 
   - hosts: test:stage:prod
     sudo: true
@@ -55,18 +56,6 @@
     roles:
      - ossec-configure
      - alertlogic-configure
-
-  - hosts: prod-apse2
-    sudo: true
-
-    roles:
-    - ossec-configure
-
-  - hosts: all
-    sudo: true
-
-    roles:
-     - service-discovery
 
   - hosts : ebs
     sudo: true
