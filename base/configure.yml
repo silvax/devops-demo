@@ -57,6 +57,12 @@
      - ossec-configure
      - alertlogic-configure
 
+  - hosts: prod-apse2
+    sudo: true
+
+    roles:
+     - ossec-configure
+
   - hosts : ebs
     sudo: true
 
