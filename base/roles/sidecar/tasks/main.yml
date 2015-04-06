@@ -7,8 +7,7 @@
     pip: name='file:///tmp/sidecar.tar.gz'
 
   - name: register the sidecar service
-    sudo: true
-    shell: /sbin/chkconfig --add sidecard
+    service: enabled=yes
 
-  - name: enable the sidecar service with default config
+  - name: start sidecar service with default config
     service: name=sidecard state=started
