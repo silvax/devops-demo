@@ -6,8 +6,5 @@
   - name: pip install the downloaded sidecar package
     pip: name='file:///tmp/sidecar.tar.gz'
 
-  - name: register the sidecar service
-    service: enabled=yes
-
   - name: start sidecar service with default config
-    service: name=sidecard state=started
+    service: name=sidecard state=started enabled=yes
