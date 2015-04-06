@@ -8,14 +8,8 @@
   action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
   register: allTags
 
-- copy: src={{ allTags.tags.environment }}/ dest=/var/alertlogic/etc
+- command: '/etc/init.d/al-agent provision --key 21aeb4c47ea54b3a4e04a33f2652bddb1668fe1ae7caa31f07 --inst-type host'
 
-- command: '/etc/init.d/al-threat-host configure --host vaporator.alertlogic.com --inst-type role'
-
-- service: name=al-threat-host state=started enabled=yes
-
-- service: name=al-log-agent state=started enabled=yes
-
-- copy: src=31-al-log.conf dest=/etc/rsyslog.d/31-al-log.conf
+- service: name=al-agent state=started enabled=yes
 
 - service: name=rsyslog state=restarted
