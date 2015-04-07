@@ -16,8 +16,6 @@
 
 - copy: src=delete.rb dest=/opt/jc/delete.rb mode=0755
 
-- gem: name=jumpcloud version=0.4.0 user_install=false state=present
-
 - command: 'ruby /opt/jc/register.rb'
   ignore_errors: yes
 
