@@ -67,9 +67,3 @@
 
     roles:
      - ossec-configure
-
-  - hosts : ebs
-    sudo: true
-
-    roles:
-      - ebs-volumes

@@ -2,6 +2,13 @@
   - hosts: all
     sudo: true
 
+    tasks:
+      - name: determine if instance is ebs backed or instance store
+        command: "aws ec2 describe-images --image-ids {{ ansible_ec2_ami_id }} --query='Images[0].RootDeviceType' --region {{ ansible_ec2_placement_region }} --output=text"
+        register: root_device_type
+
+      - group_by: key={{ root_device_type.stdout }}
+
     roles:
     - system
     - repos
@@ -12,3 +19,10 @@
     - jumpcloud-install
     - ossec-install
     - alertlogic-install
+
+
+  - hosts : ebs
+    sudo: true
+
+    roles:
+      - ebs-volumes
