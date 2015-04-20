@@ -35,7 +35,12 @@ start() {
 	fi
 
 	# start supervisord with options from sysconfig (stuff like -c)
-        /usr/bin/supervisord $OPTIONS
+  {% if supervisor_in_local %}
+  /usr/local/bin/supervisord $OPTIONS
+  {% else %}
+  /usr/bin/supervisord $OPTIONS
+  {% endif %}
+
 
 	# show initial startup status
 	/usr/bin/supervisorctl $OPTIONS status
