@@ -26,6 +26,13 @@ RETVAL=0
 PIDFILE=/var/run/supervisord.pid
 OPTIONS="-c /etc/supervisord.conf"
 
+# define location of supervisor bin files
+{% if supervisor_in_local %}
+SUPERVISORDIR=/usr/local/bin
+{% else %}
+SUPERVISORDIR=/usr/bin
+{% endif %}
+
 
 start() {
     echo "Starting supervisord: "
@@ -35,10 +42,11 @@ start() {
 	fi
 
 	# start supervisord with options from sysconfig (stuff like -c)
-        /usr/bin/supervisord $OPTIONS
+  "$SUPERVISORDIR"/supervisord $OPTIONS
 
 	# show initial startup status
-	/usr/bin/supervisorctl $OPTIONS status
+  "$SUPERVISORDIR"/supervisorctl $OPTIONS status
+
 
 	# only create the subsyslock if we created the PIDFILE
         [ -e $PIDFILE ] && touch /var/lock/subsys/supervisord
@@ -46,7 +54,7 @@ start() {
 
 stop() {
     echo -n "Stopping supervisord: "
-    /usr/bin/supervisorctl $OPTIONS shutdown
+    "$SUPERVISORDIR"/supervisorctl $OPTIONS shutdown
 	if [ -n "$WAIT_FOR_SUBPROCESSES" ]; then
         echo "Waiting roughly 60 seconds for $PIDFILE to be removed after child processes exit"
         for sleep in  2 2 2 2 4 4 4 4 8 8 8 8 last; do
@@ -89,7 +97,7 @@ case "$1" in
         RETVAL=$?
         ;;
     reload)
-        /usr/bin/supervisorctl $OPTIONS reload
+    "$SUPERVISORDIR"/supervisorctl $OPTIONS reload
         RETVAL=$?
         ;;
     condrestart)
