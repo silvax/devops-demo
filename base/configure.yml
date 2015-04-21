@@ -55,14 +55,7 @@
     roles:
       - jumpcloud-configure
 
-  - hosts: test:stage:prod
-    sudo: true
-
-    roles:
-     - ossec-configure
-     - alertlogic-configure
-
-  - hosts: prod-apse2
+  - hosts: test:stage:prod:prod-apse2
     sudo: true
 
     roles:
