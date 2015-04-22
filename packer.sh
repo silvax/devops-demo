@@ -1,6 +1,6 @@
 #!/bin/bash
 sudo easy_install pip
-sudo pip install ansible==1.7.1
+sudo pip install ansible
 sudo mkdir -p /etc/ansible
 sudo chown ec2-user:ec2-user /etc/ansible
 sudo mv /home/ec2-user/base/ansible.cfg /etc/ansible/ansible.cfg
