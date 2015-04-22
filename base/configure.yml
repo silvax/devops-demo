@@ -63,7 +63,7 @@
     roles:
      - ossec-configure
 
-  - hosts: bastion:openvpn:turnserver:connect_proxy_legacy:realtime-proxy:nginx-proxy:jslave:realtime:pairing:auth:edge_proxy:public_api:upload:onboarding:carrier_pigeon
+  - hosts: bastion:openvpn:turnserver:connect_proxy_legacy:realtime-proxy:nginx-proxy:jslave:realtime:pairing:auth:edge_proxy:public_api:upload:onboarding:carrier_pigeon:&stage:prod:prod-apse2
     sudo: true
 
     roles:
