@@ -25,6 +25,8 @@
 
       - group_by: key={{ allTags.tags.environment }}
 
+      - group_by: key={{ allTags.tags.role }}
+
       - group_by: key={{ root_device_type.stdout }}
 
       - group_by: key={{ ansible_ec2_instance_type }}
@@ -55,15 +57,14 @@
     roles:
       - jumpcloud-configure
 
-  - hosts: test:stage:prod
+  - hosts: test:stage:prod:prod-apse2
     sudo: true
 
     roles:
      - ossec-configure
-     - alertlogic-configure
 
-  - hosts: prod-apse2
+  - hosts: bastion:openvpn:turnserver:connect_proxy_legacy:realtime-proxy:nginx-proxy:jslave:realtime:pairing:auth:edge_proxy:public_api:upload:onboarding:carrier_pigeon:&stage:prod:prod-apse2
     sudo: true
 
     roles:
-     - ossec-configure
+      - alertlogic-configure
