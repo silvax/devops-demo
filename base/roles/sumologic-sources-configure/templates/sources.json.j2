@@ -152,7 +152,7 @@
 {% if sumo_sources_all or sumo_sources_tokumx %}
     {
       "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/tokumx",
-      "category" : "{{ allTags.tags.opsworks:stack }}-{{ allTags.tags.opsworks:instance }}",
+      "category" : "{{ allTags.tags["opsworks:stack"]| default(allTags.tags.role) }}-{{ allTags.tags["opsworks:instance"]| default (allTags.tags.environment)  }}",
       "sourceType": "LocalFile",
       "multilineProcessingEnabled": false,
       "pathExpression": "/var/log/tokumx/tokumx.log",
