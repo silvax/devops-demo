@@ -17,3 +17,6 @@
 
   - name: create a link to ansible in /usr/bin. Needed to run userdata
     file: name=/usr/bin/ansible-playbook src=/usr/local/bin/ansible-playbook state=link
+
+  - name: upgrade all packages. Same as a yum update
+    yum: name=* state=latest
