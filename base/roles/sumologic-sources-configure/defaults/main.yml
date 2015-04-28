@@ -10,3 +10,4 @@ sumo_sources_mongo: False
 sumo_sources_nginx: False
 sumo_sources_haproxy: False
 sumo_sources_es: False
+sumo_sources_tokumx: False
