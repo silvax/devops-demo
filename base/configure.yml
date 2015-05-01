@@ -50,6 +50,7 @@
      - newrelicnode-configure
      - sumologic-configure
      - service-discovery
+     - keymaster
 
   - hosts: stage:prod:prod-apse2
     sudo: true
