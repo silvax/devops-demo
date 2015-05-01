@@ -13,7 +13,7 @@ ssh_users_details = OrderedDict()
 parser = argparse.ArgumentParser(description='Process command line arguments')
 parser.add_argument('-t', '--table', nargs='*',dest='table', action="store", default='ssh-user', required=False, help='Enter the name of the DynamoDB tables where data is stored. Default is ssh_users')
 parser.add_argument('-r', '--region', nargs='*',dest='region', action="store", default='us-east-1', required=False, help='Enter the AWS region where the DynamoDB table is stored. Default is us-east-1')
-parser.add_argument('-f', '--file', nargs='*',dest='file', action="store", default='/opt/keymaster/user.yml', required=False, help='enter the name of the yaml file where the data will be stored. Default is users.yml')
+parser.add_argument('-f', '--file', nargs='*',dest='file', action="store", default='/opt/gatekeeper/user.yml', required=False, help='enter the name of the yaml file where the data will be stored. Default is users.yml')
 args = parser.parse_args()
 
 

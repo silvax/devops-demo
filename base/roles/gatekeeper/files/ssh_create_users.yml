@@ -5,7 +5,7 @@
 
     tasks:
       - name: include all the vars from the file
-        include_vars: /opt/keymaster/user.yml
+        include_vars: /opt/gatekeeper/user.yml
 
       - name: create user accounts
         sudo: yes
