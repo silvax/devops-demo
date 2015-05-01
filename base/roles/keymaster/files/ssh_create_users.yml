@@ -1,0 +1,36 @@
+---
+  - hosts: all
+    sudo: true
+    gather_facts: false
+
+    tasks:
+      - name: include all the vars from the file
+        include_vars: /opt/keymaster/user.yml
+
+      - name: create user accounts
+        sudo: yes
+        user:
+          name: "{{item.name}}"
+          groups: admins
+          append: yes
+          shell: /bin/bash
+          state: "{{ item.userstate }}"
+        with_items: sudo_users
+
+      - name: add keys to sudo accounts
+        sudo: yes
+        authorized_key:
+          user: "{{item.name}}"
+          key: "{{item.ssh_key}}"
+          state: present
+        with_items: sudo_users
+        when: item.userstate  == "present"
+
+      - name: remove keys to sudo accounts
+        sudo: yes
+        authorized_key:
+          user: "{{item.name}}"
+          key: "{{item.ssh_key}}"
+          state: absent
+        with_items: sudo_users
+        when: item.userstate  == "absent"
