@@ -73,7 +73,7 @@
     },
     {
       "type": "ansible-local",
-      "playbook_file": "base/build.yml",
+      "playbook_file": "base/configure.yml",
       "playbook_dir": "base"
     }
   ]
