@@ -1,20 +1,41 @@
 #! /usr/bin/env python
-
-from pynamodb.models import Model
-from pynamodb.attributes import UnicodeAttribute, BooleanAttribute, NumberAttribute
+from boto.sts import STSConnection
+import boto.dynamodb2
+from boto.dynamodb2.table import Table
 import yaml,argparse
 from collections import OrderedDict
 
 sudo_users = {}
 ssh_users = []
 ssh_users_details = OrderedDict()
+dest_role = "arn:aws:iam::607886752321:role/gatekeeper"
 
 # Parse command line arguments
 parser = argparse.ArgumentParser(description='Process command line arguments')
-parser.add_argument('-t', '--table', nargs='*',dest='table', action="store", default='ssh-user', required=False, help='Enter the name of the DynamoDB tables where data is stored. Default is ssh_users')
-parser.add_argument('-r', '--region', nargs='*',dest='region', action="store", default='us-east-1', required=False, help='Enter the AWS region where the DynamoDB table is stored. Default is us-east-1')
-parser.add_argument('-f', '--file', nargs='*',dest='file', action="store", default='/opt/gatekeeper/user.yml', required=False, help='enter the name of the yaml file where the data will be stored. Default is users.yml')
+parser.add_argument('-t', '--table', nargs='*',dest='table', action="store", default='ssh-user', required=True, help='Enter the name of the DynamoDB tables where data is stored. Default is ssh_users')
+parser.add_argument('-r', '--region', nargs='*',dest='region', action="store", default='us-east-1', required=True, help='Enter the AWS region where the DynamoDB table is stored. Default is us-east-1')
+parser.add_argument('-f', '--file', nargs='*',dest='file', action="store",required=True, help='enter the name of the yaml file where the data will be stored. Default is users.yml')
+parser.add_argument('-r', '--role', nargs='*',dest='file', action="store", required=False, help='enter the arn of the role that will be assumed on the target account for dynamodb accessl')
 args = parser.parse_args()
+
+# setup the sts object that will be used to assume the role
+if args.role:
+    sts_connection = STSConnection()
+    assumedRoleObject = sts_connection.assume_role(
+        role_arn=args.region,
+        role_session_name="AssumeRoleSession1"
+    )
+
+    # create the connection
+    conn = boto.dynamodb2.connect_to_region(
+        args.region,
+        aws_access_key_id=assumedRoleObject.credentials.access_key,
+        aws_secret_access_key=assumedRoleObject.credentials.secret_key,
+        security_token=assumedRoleObject.credentials.session_token
+    )
+
+
+ssh_user_table = Table(args.table, connection=conn)
 
 
 # Added to be able to a yaml.dump with an ordered dict
@@ -43,29 +64,17 @@ def represent_odict(dump, tag, mapping, flow_style=None):
             node.flow_style = best_style
     return node
 
-# This model defines the table that pynamodb reads fro DynamoDB
-class UserModel(Model):
-    """
-    A DynamoDB SSH User Table
-    """
-    class Meta:
-        table_name = args.table
-        region = args.region
-    username = UnicodeAttribute(hash_key=True )
-    userstate = UnicodeAttribute()
-    ssh_key = UnicodeAttribute()
-    uid = NumberAttribute()
+
 
 # This section of code reads the dynamobdb table and loads the data into an ordered dictionary
 print "Reading users from DynamoDB ..."
-for user in  UserModel.scan():
-    ssh_users_details['name']= user.username
-    ssh_users_details['userstate']=user.userstate
-    ssh_users_details['ssh_key']=user.ssh_key
-    ssh_users_details['uid']=user.uid
+for user in ssh_user_table.scan():
+    print user
+    ssh_users_details['name']= user['username']
+    ssh_users_details['userstate']=user['userstate']
+    ssh_users_details['ssh_key']=user['ssh_key']
     ssh_users.append(ssh_users_details)
     ssh_users_details = OrderedDict()
-
 
 sudo_users['sudo_users']=ssh_users
 
