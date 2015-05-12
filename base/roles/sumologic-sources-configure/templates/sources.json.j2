@@ -176,6 +176,14 @@
       "timeZone": "UTC"
     },
     {
+      "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/ansible",
+      "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
+      "sourceType": "LocalFile",
+      "multilineProcessingEnabled": false,
+      "pathExpression": "/home/ec2-user/ansible-json.log",
+      "timeZone": "UTC"
+    },
+    {
       "name": "{{ allTags.tags.role }}/{{ allTags.tags.environment | default('dev') }}/{{ ansible_ec2_instance_id }}/user-data",
       "category" : "{{ allTags.tags.role }}-{{ allTags.tags.environment | default('dev') }}",
       "sourceType": "LocalFile",
