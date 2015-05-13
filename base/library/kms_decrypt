@@ -1,0 +1,145 @@
+
+'''
+Created on Apr 30, 2015
+
+@author: ryanbachman
+'''
+
+
+DOCUMENTATION = '''
+---
+module: kms_decrypt
+short_description: Using ksm for client side decryption 
+description:
+    - Use a kms key to encrypt/decrypt file from local disk or s3 and store in either location.
+version_added: "1.0"
+options:
+    src:
+        description:
+            - src path of object
+        required: true
+        default: null
+    dest:
+        description:
+            - dest path of object
+        required: false
+        default: null      
+    style:
+        description:
+            - file format to parse
+        required: false
+        choices: ['json','yaml', None]
+
+
+requirements: [ "boto 2.38+" ]
+
+'''
+
+EXAMPLES = '''
+# Reads encrypted object from s3 path and stores it to destination file
+- kms_decrypt: src=s3://inin-kms-secured-data/cert/foo.crt dest=/etc/certs/foo.crt
+# Parses s3 file as json and returns dictionary to be used in registered ansible variable
+- kms_decrypt: src=s3://inin-kms-secured-data/cert/foo.crt style=jsoncat
+
+'''
+
+import json
+import yaml
+import re
+import base64
+from Crypto.Cipher import AES
+from ansible.module_utils.basic import *
+
+
+
+try:
+    from boto import kms as k
+    from boto import s3 as s
+except ImportError:
+    kms_imported = False
+else:
+    kms_imported = True
+
+#TODO
+#Abstract region where needed    
+
+AWS_REGION = 'us-east-1'    
+KMS_CONN = k.connect_to_region(AWS_REGION)
+S3_CONN = s.connect_to_region(AWS_REGION)
+
+def decrypt(cipher_data):
+    decode = lambda s : base64.b64decode(s)
+    unpad = lambda s : s[0:-ord(s[-1])]
+    iv = decode(cipher_data['iv']) 
+    decryption_key = KMS_CONN.decrypt(decode(cipher_data['encoded_key']))['Plaintext']
+    key = AES.new(decryption_key, AES.MODE_CBC,iv)
+    return unpad(key.decrypt(decode(cipher_data['content'])))
+
+def parse(content,style):
+    parse_opts = {
+                  'json' : parse_json,
+                  'yaml' : parse_yaml
+                  }
+    if style is not None:
+        return parse_opts[style](content)
+    else:
+        return content
+      
+def parse_json(content):
+    return json.loads(content)
+
+def parse_yaml(content):   
+    y = yaml.load(content)
+    d = {}
+    for k,v in y.iteritems():
+        d[k] = v
+    return d
+
+def get_from_s3(**params):
+    b = S3_CONN.get_bucket(params['bucket'])
+    key = b.get_key(params['key'])
+    return {'content': key.get_contents_as_string(), 'encoded_key': key.get_metadata('encryption-key'), 'iv' : key.get_metadata('iv') }
+
+def write_to_file(content,filename):
+    with open(filename, 'w+:') as f:
+        f.write(content)
+        
+
+def main():
+    
+    S3_SYNTAX = 's3://(.*?)/(.*)'
+
+    module = AnsibleModule(
+                           argument_spec = dict(
+                                                src = dict(required=True),
+                                                dest = dict(required=False,default=None),
+                                                style = dict(required=False, default=None, choices=['json','yaml',None])
+                                                )
+                           )
+    
+    if not kms_imported:
+        module.fail_json(msg='Boto 2.38+ must be installed')
+    opts = {}
+    
+    s3_match = re.match(S3_SYNTAX,module.params['src'])
+    if s3_match:
+        opts['bucket'] = s3_match.group(1)
+        opts['key'] = s3_match.group(2)
+    else:
+        module.fail_json(msg='The src param must use s3 object for source.')
+    try:
+        content = str(decrypt(get_from_s3(bucket=opts['bucket'],key=opts['key'])).rstrip('\b\n'))
+        if module.params['dest'] is not None: 
+            write_to_file(content,module.params['dest'])
+        if module.params['style'] is not None:
+            parsed_data = parse(content,module.params['style']) 
+            module.exit_json(changed=True,content=parsed_data)
+        else:
+            module.exit_json(changed=True,content=content)      
+    except Exception, e:
+        module.fail_json(msg=str(e))
+    
+
+if __name__ == '__main__':
+    main()
+    
