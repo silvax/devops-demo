@@ -1,0 +1,18 @@
+---
+# Downloads and saves certificate pair using kms module
+#
+#  usage:
+#  - { role: certificate-retrieval, cert_directory: "/etc/certs", domain: "inindca.com", dest_name: "server" }
+#
+#
+#
+
+- name: Create cert directory if it doesn't exist
+  file: path={{ cert_directory }} state=directory
+
+- name: Fetch Certificates
+  kms_decrypt: src=s3://{{ kms_bucket }}/ansible/certs/{{ item.src_file }} dest={{ cert_directory }}/{{ item.dest_file }}
+  with_items:
+    - { src_file: "{{ domain }}.crt", dest_file: "{{ dest_name | default(domain)  }}.crt" }
+    - { src_file: "{{ domain }}.key", dest_file: "{{ dest_name | default(domain)  }}.key" }
+  register: certs
