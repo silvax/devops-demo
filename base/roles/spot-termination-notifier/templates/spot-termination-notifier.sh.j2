@@ -3,7 +3,7 @@ ACCOUNT_ID=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/docu
 while true
 do
     if curl -s http://169.254.169.254/latest/meta-data/spot/termination-time | grep -q .*T.*Z; then 
-        aws sns publish --topic-arn "arn:aws:sns:{{ ansible_ec2_placement_region }}:$ACCOUNT_ID:spot-notification" --message '{ "event" : "spot_termination_notice", "instance_id" : "{{ ansible_ec2_instance_id }}", "region" : "{{ ansible_ec2_placement_region }}", "role" : "{{ allTags.tags.role }}" }'
+        aws sns publish --region {{ ansible_ec2_placement_region }} --topic-arn "arn:aws:sns:{{ ansible_ec2_placement_region }}:$ACCOUNT_ID:spot-notification" --message '{ "event" : "spot_termination_notice", "instance_id" : "{{ ansible_ec2_instance_id }}", "region" : "{{ ansible_ec2_placement_region }}", "role" : "{{ allTags.tags.role }}" }'
 	[ -x "/home/ec2-user/spot-termination-callback.sh" ] && /home/ec2-user/spot-termination-callback.sh
     fi
     sleep 5
