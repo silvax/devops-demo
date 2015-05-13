@@ -135,7 +135,7 @@ def main():
             parsed_data = parse(content,module.params['style']) 
             module.exit_json(changed=True,content=parsed_data)
         else:
-            module.exit_json(changed=True,content=content)      
+            module.exit_json(changed=True,content="")      
     except Exception, e:
         module.fail_json(msg=str(e))
     
