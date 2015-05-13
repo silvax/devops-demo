@@ -9,7 +9,7 @@ Created on Apr 30, 2015
 DOCUMENTATION = '''
 ---
 module: kms_decrypt
-short_description: Using ksm for client side decryption 
+short_description: Using kms for client side decryption 
 description:
     - Use a kms key to encrypt/decrypt file from local disk or s3 and store in either location.
 version_added: "1.0"
