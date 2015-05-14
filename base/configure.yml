@@ -23,11 +23,6 @@
 
       - lineinfile: dest=/etc/hosts regexp='^127.0.0.1' line='127.0.0.1 {{ allTags.tags.role }}-{{ ansible_ec2_local_ipv4|replace(".", "-") }}.localdomain {{ allTags.tags.role }}-{{ ansible_ec2_local_ipv4|replace(".", "-") }} localhost localhost.localdomain'
 
-      - name: determine if we are a spot instance or not
-        shell: "aws ec2 describe-instances --region {{ ansible_ec2_placement_region }}  --instance-ids {{ ansible_ec2_instance_id }} --query='Reservations[0].Instances[0].SpotInstanceRequestId' --output text"
-        register: spot_instance
-      - debug: var=spot_instance
-
       - group_by: key={{ allTags.tags.environment }}
 
       - group_by: key={{ allTags.tags.role }}
@@ -55,21 +50,20 @@
      - newrelicnode-configure
      - sumologic-configure
      - service-discovery
-     - { role: spot-termination-notifier, when: spot_instance.stdout != "None" }
 
-  - hosts: stage:prod:prod-apse2
+  - hosts: stage:prod:prod-apse2:prod-euw1
     sudo: true
 
     roles:
       - jumpcloud-configure
 
-  - hosts: test:stage:prod:prod-apse2
+  - hosts: test:stage:prod:prod-apse2:prod-euw1
     sudo: true
 
     roles:
      - ossec-configure
 
-  - hosts: bastion:openvpn:turnserver:connect_proxy_legacy:realtime-proxy:nginx-proxy:jslave:realtime:pairing:auth:edge_proxy:public_api:upload:onboarding:carrier_pigeon:&stage:prod:prod-apse2
+  - hosts: bastion:openvpn:turnserver:connect_proxy_legacy:realtime-proxy:nginx-proxy:jslave:realtime:pairing:auth:edge_proxy:public_api:upload:onboarding:carrier_pigeon:&stage:prod:prod-apse2:prod-euw1
     sudo: true
 
     roles:
