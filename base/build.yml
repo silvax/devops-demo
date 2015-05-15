@@ -19,7 +19,6 @@
     - jumpcloud-install
     - ossec-install
     - alertlogic-install
-    - gatekeeper
 
 
   - hosts : ebs
