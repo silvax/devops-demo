@@ -15,27 +15,34 @@ parser = argparse.ArgumentParser(description='Process command line arguments')
 parser.add_argument('-t', '--table', nargs='*',dest='table', action="store", default='ssh-user', required=True, help='Enter the name of the DynamoDB tables where data is stored. Default is ssh_users')
 parser.add_argument('-r', '--region', nargs='*',dest='region', action="store", default='us-east-1', required=True, help='Enter the AWS region where the DynamoDB table is stored. Default is us-east-1')
 parser.add_argument('-f', '--file', nargs='*',dest='file', action="store",required=True, help='enter the name of the yaml file where the data will be stored. Default is users.yml')
-parser.add_argument('-r', '--role', nargs='*',dest='file', action="store", required=False, help='enter the arn of the role that will be assumed on the target account for dynamodb accessl')
+parser.add_argument('-s', '--stsrole', nargs='*',dest='stsrole', action="store", required=False, help='enter the arn of the role that will be assumed on the target account for dynamodb accessl')
+
 args = parser.parse_args()
 
-# setup the sts object that will be used to assume the role
-if args.role:
+
+if args.stsrole:
     sts_connection = STSConnection()
     assumedRoleObject = sts_connection.assume_role(
-        role_arn=args.region,
+        role_arn=args.stsrole[0],
         role_session_name="AssumeRoleSession1"
     )
+    print "setting up STS connection with assumed role: " + args.stsrole[0]
 
-    # create the connection
+    # create the connection using sts
     conn = boto.dynamodb2.connect_to_region(
-        args.region,
+        args.region[0],
         aws_access_key_id=assumedRoleObject.credentials.access_key,
         aws_secret_access_key=assumedRoleObject.credentials.secret_key,
         security_token=assumedRoleObject.credentials.session_token
     )
+else:
+    # create the connection no sts
+    conn = boto.dynamodb2.connect_to_region(
+        args.region
+    )
 
 
-ssh_user_table = Table(args.table, connection=conn)
+ssh_user_table = Table(args.table[0], connection=conn)
 
 
 # Added to be able to a yaml.dump with an ordered dict
@@ -65,11 +72,9 @@ def represent_odict(dump, tag, mapping, flow_style=None):
     return node
 
 
-
 # This section of code reads the dynamobdb table and loads the data into an ordered dictionary
-print "Reading users from DynamoDB ..."
+print "Reading users from DynamoDB Table :" + args.table[0]
 for user in ssh_user_table.scan():
-    print user
     ssh_users_details['name']= user['username']
     ssh_users_details['userstate']=user['userstate']
     ssh_users_details['ssh_key']=user['ssh_key']
@@ -83,6 +88,6 @@ yaml.SafeDumper.add_representer(OrderedDict,
     lambda dumper, value: represent_odict(dumper, u'tag:yaml.org,2002:map', value))
 
 # this will write the data in the ordered dictionary into the yaml file
-print "Writing YAML file with users ..."
-with open(args.file, 'w') as outfile:
+print "Writing YAML file with users to file: " + args.file[0]
+with open(args.file[0], 'w') as outfile:
     outfile.write(yaml.safe_dump(sudo_users, default_flow_style=False) )

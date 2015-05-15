@@ -1,2 +1,2 @@
 # User rules for admin users
-admins ALL=(ALL) NOPASSWD:ALL
+%admins ALL=(ALL) NOPASSWD:ALL

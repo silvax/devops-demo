@@ -5,7 +5,7 @@
 
     tasks:
       - name: include all the vars from the file
-        include_vars: /opt/gatekeeper/user.yml
+        include_vars: /opt/gatekeeper/users.yml
 
       - name: create user accounts
         sudo: yes
@@ -16,6 +16,7 @@
           shell: /bin/bash
           state: "{{ item.userstate }}"
         with_items: sudo_users
+        when: item.userstate  == "present"
 
       - name: add keys to sudo accounts
         sudo: yes
@@ -26,11 +27,12 @@
         with_items: sudo_users
         when: item.userstate  == "present"
 
-      - name: remove keys to sudo accounts
+      - name: remove users that are set absent
         sudo: yes
         authorized_key:
           user: "{{item.name}}"
-          key: "{{item.ssh_key}}"
+          key: "{{ item.ssh_key }}"
           state: absent
         with_items: sudo_users
-        when: item.userstate  == "absent"
+        when: lookup('pipe','id -u {{ item.name }}') == 0 and item.userstate  == "absent" 
+        ignore_errors: true
