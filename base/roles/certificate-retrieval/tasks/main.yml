@@ -2,17 +2,30 @@
 # Downloads and saves certificate pair using kms module
 #
 #  usage:
-#  - { role: certificate-retrieval, cert_directory: "/etc/certs", domain: "inindca.com", dest_name: "server" }
-#
-#
+#  - { role: certificate-retrieval, cert_directory: "/etc/certs", domain: "inindca.com", dest_name: "server", cert_owner:"ec2-user", cert_perms:0400, multiple_certs: true }
+#  vars:
+#    cert_directory: (reqiured)
+#      - Defines where downloaded certs will be stored on local file system
+#    domain: (required)
+#      - Common name of Certificate pair
+#    dest_name: (optional)
+#      - Destination file name for certificate pair.  If this variable is defined in a playbook, files will be writted {{ dest_name }}.crt and .key.  Default: {{ domain }}  
+#    cert_owner: (optional)
+#      - Set ownership of cert file on file system:  Default: "root"
+#    cert_perms: (optional)
+#      - Set permissions of certificate pair: Default: 0440
+#    multiple_cets: (optional)
+#      - Boolean used if server only requires .crt file without .key file.  Default: True
 #
 
 - name: Create cert directory if it doesn't exist
   file: path={{ cert_directory }} state=directory
 
-- name: Fetch Certificates
-  kms_decrypt: src=s3://{{ kms_bucket }}/ansible/certs/{{ item.src_file }} dest={{ cert_directory }}/{{ item.dest_file }}
-  with_items:
-    - { src_file: "{{ domain }}.crt", dest_file: "{{ dest_name | default(domain)  }}.crt" }
-    - { src_file: "{{ domain }}.key", dest_file: "{{ dest_name | default(domain)  }}.key" }
-  register: certs
+- name: Fetch public certificate file
+  kms_decrypt: src=s3://{{ kms_bucket }}/ansible/certs/{{ domain }}.crt dest={{ cert_directory }}/{{ dest_name | default(domain) }}.crt file_owner={{ cert_owner }} file_perms={{ cert_perms }}
+  register: cert_file
+
+- name: Fetch private key file
+  kms_decrypt: src=s3://{{ kms_bucket }}/ansible/certs/{{ domain }}.key dest={{ cert_directory }}/{{ dest_name | default(domain) }}.key file_owner={{ cert_owner }} file_perms={{ cert_perms }}
+  register: key_file
+  when: multiple_certs == true

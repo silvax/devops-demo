@@ -29,7 +29,14 @@ options:
             - file format to parse
         required: false
         choices: ['json','yaml', None]
-
+    file_owner:
+	description:
+	    - set ownership of kms saved file
+	required: false 
+    file_perms:
+        description: 
+            - Change mode of saved file
+        required: false
 
 requirements: [ "boto 2.38+" ]
 
@@ -39,17 +46,20 @@ EXAMPLES = '''
 # Reads encrypted object from s3 path and stores it to destination file
 - kms_decrypt: src=s3://inin-kms-secured-data/cert/foo.crt dest=/etc/certs/foo.crt
 # Parses s3 file as json and returns dictionary to be used in registered ansible variable
-- kms_decrypt: src=s3://inin-kms-secured-data/cert/foo.crt style=jsoncat
-
+- kms_decrypt: src=s3://inin-kms-secured-data/cert/foo.crt style=json
+# Set file owner to ec2-user and change file permissions
+- kms_decrypt: src=s3://inin-kms-secured-data/cert/foo.crt dest=/etc/certs/foo.crt file_owner=ec2-user file_perms=0400
 '''
 
 import json
 import yaml
 import re
+import os
+import grp
+import pwd
 import base64
 from Crypto.Cipher import AES
 from ansible.module_utils.basic import *
-
 
 
 try:
@@ -61,7 +71,7 @@ else:
     kms_imported = True
 
 #TODO
-#Abstract region where needed    
+#Abstract region where needed
 
 AWS_REGION = 'us-east-1'    
 KMS_CONN = k.connect_to_region(AWS_REGION)
@@ -100,10 +110,15 @@ def get_from_s3(**params):
     key = b.get_key(params['key'])
     return {'content': key.get_contents_as_string(), 'encoded_key': key.get_metadata('encryption-key'), 'iv' : key.get_metadata('iv') }
 
-def write_to_file(content,filename):
+def write_to_file(content,filename,owner,perms):
     with open(filename, 'w+:') as f:
         f.write(content)
-        
+    try:
+        os.chown(filename, pwd.getpwnam(owner).pw_uid, grp.getgrnam(owner).gr_gid)
+        if perms is not None: os.chmod(filename,int(perms))
+        return True
+    except Exception, e:
+        return False
 
 def main():
     
@@ -113,7 +128,9 @@ def main():
                            argument_spec = dict(
                                                 src = dict(required=True),
                                                 dest = dict(required=False,default=None),
-                                                style = dict(required=False, default=None, choices=['json','yaml',None])
+                                                style = dict(required=False, default=None, choices=['json','yaml',None]),
+                                                file_owner = dict(required=False, default='root'),
+                                                file_perms = dict(required=False, default=None)
                                                 )
                            )
     
@@ -130,12 +147,13 @@ def main():
     try:
         content = str(decrypt(get_from_s3(bucket=opts['bucket'],key=opts['key'])).rstrip('\b\n'))
         if module.params['dest'] is not None: 
-            write_to_file(content,module.params['dest'])
+            if not write_to_file(content,module.params['dest'],module.params['file_owner'],module.params['file_perms']):
+                module.fail_json(msg="Unable to change ownership to {}".format(module.params['file_owner']))
         if module.params['style'] is not None:
             parsed_data = parse(content,module.params['style']) 
-            module.exit_json(changed=True,content=parsed_data)
+            module.exit_json(changed=True,content=parsed_data, sensitive=True)
         else:
-            module.exit_json(changed=True,content="")      
+            module.exit_json(changed=True,content=content, sensitive=True)      
     except Exception, e:
         module.fail_json(msg=str(e))
     
