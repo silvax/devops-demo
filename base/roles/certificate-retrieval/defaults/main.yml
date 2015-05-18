@@ -1,5 +1,5 @@
 ---
 kms_bucket: "inin-kms-secured-data"
 cert_owner: "root"
-cert_perms: 0440
-multiple_certs: true
+cert_mode: 0440
+include_key_file: true

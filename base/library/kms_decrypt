@@ -9,7 +9,7 @@ Created on Apr 30, 2015
 DOCUMENTATION = '''
 ---
 module: kms_decrypt
-short_description: Using kms for client side decryption 
+short_description: Using kms for client side decryption
 description:
     - Use a kms key to encrypt/decrypt file from local disk or s3 and store in either location.
 version_added: "1.0"
@@ -23,18 +23,18 @@ options:
         description:
             - dest path of object
         required: false
-        default: null      
+        default: null
     style:
         description:
             - file format to parse
         required: false
         choices: ['json','yaml', None]
-    file_owner:
+    owner:
 	description:
 	    - set ownership of kms saved file
-	required: false 
-    file_perms:
-        description: 
+	required: false
+    mode:
+        description:
             - Change mode of saved file
         required: false
 
@@ -48,7 +48,7 @@ EXAMPLES = '''
 # Parses s3 file as json and returns dictionary to be used in registered ansible variable
 - kms_decrypt: src=s3://inin-kms-secured-data/cert/foo.crt style=json
 # Set file owner to ec2-user and change file permissions
-- kms_decrypt: src=s3://inin-kms-secured-data/cert/foo.crt dest=/etc/certs/foo.crt file_owner=ec2-user file_perms=0400
+- kms_decrypt: src=s3://inin-kms-secured-data/cert/foo.crt dest=/etc/certs/foo.crt owner=ec2-user mode=0400
 '''
 
 import json
@@ -73,14 +73,14 @@ else:
 #TODO
 #Abstract region where needed
 
-AWS_REGION = 'us-east-1'    
+AWS_REGION = 'us-east-1'
 KMS_CONN = k.connect_to_region(AWS_REGION)
 S3_CONN = s.connect_to_region(AWS_REGION)
 
 def decrypt(cipher_data):
     decode = lambda s : base64.b64decode(s)
     unpad = lambda s : s[0:-ord(s[-1])]
-    iv = decode(cipher_data['iv']) 
+    iv = decode(cipher_data['iv'])
     decryption_key = KMS_CONN.decrypt(decode(cipher_data['encoded_key']))['Plaintext']
     key = AES.new(decryption_key, AES.MODE_CBC,iv)
     return unpad(key.decrypt(decode(cipher_data['content'])))
@@ -94,11 +94,11 @@ def parse(content,style):
         return parse_opts[style](content)
     else:
         return content
-      
+
 def parse_json(content):
     return json.loads(content)
 
-def parse_yaml(content):   
+def parse_yaml(content):
     y = yaml.load(content)
     d = {}
     for k,v in y.iteritems():
@@ -118,10 +118,11 @@ def write_to_file(content,filename,owner,perms):
         if perms is not None: os.chmod(filename,int(perms))
         return True
     except Exception, e:
+        os.remove(filename)
         return False
 
 def main():
-    
+
     S3_SYNTAX = 's3://(.*?)/(.*)'
 
     module = AnsibleModule(
@@ -129,15 +130,15 @@ def main():
                                                 src = dict(required=True),
                                                 dest = dict(required=False,default=None),
                                                 style = dict(required=False, default=None, choices=['json','yaml',None]),
-                                                file_owner = dict(required=False, default='root'),
-                                                file_perms = dict(required=False, default=None)
+                                                owner = dict(required=False, default='root'),
+                                                mode = dict(required=False, default=None)
                                                 )
                            )
-    
+
     if not kms_imported:
         module.fail_json(msg='Boto 2.38+ must be installed')
     opts = {}
-    
+
     s3_match = re.match(S3_SYNTAX,module.params['src'])
     if s3_match:
         opts['bucket'] = s3_match.group(1)
@@ -146,18 +147,19 @@ def main():
         module.fail_json(msg='The src param must use s3 object for source.')
     try:
         content = str(decrypt(get_from_s3(bucket=opts['bucket'],key=opts['key'])).rstrip('\b\n'))
-        if module.params['dest'] is not None: 
-            if not write_to_file(content,module.params['dest'],module.params['file_owner'],module.params['file_perms']):
-                module.fail_json(msg="Unable to change ownership to {}".format(module.params['file_owner']))
+        if module.params['dest'] is not None:
+            if not write_to_file(content,module.params['dest'],module.params['owner'],module.params['mode']):
+                module.fail_json(msg="Unable to change ownership to {}".format(module.params['owner']))
         if module.params['style'] is not None:
-            parsed_data = parse(content,module.params['style']) 
+            parsed_data = parse(content,module.params['style'])
+            #addition of sensitive flag disables logging of data contained in 'content' data in sumo_logs plugin
             module.exit_json(changed=True,content=parsed_data, sensitive=True)
         else:
-            module.exit_json(changed=True,content=content, sensitive=True)      
+            #addition of sensitive flag disables logging of data contained in 'content' data in sumo_logs plugin
+            module.exit_json(changed=True,content=content, sensitive=True)
     except Exception, e:
         module.fail_json(msg=str(e))
-    
+
 
 if __name__ == '__main__':
     main()
-    
