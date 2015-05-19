@@ -10,3 +10,4 @@ TrendMicroTenantID: 46D68589-858E-C454-E0CF-683F299F7D58
 TrendMicroTenantPassword: 25D583C3-E139-5F07-F668-F159EF2B6A2E
 TrendMicroPolicyID: 83
 servicediscoveryurl: http://service-discovery.infrastructure.inintca.com/stage/service.discovery.properties
+gatekeeper_arn: arn:aws:iam::607886752321:role/gatekeeper

@@ -56,6 +56,7 @@
      - sumologic-configure
      - service-discovery
      - { role: spot-termination-notifier, when: spot_instance.stdout != "None" }
+     - gatekeeper
 
   - hosts: stage:prod:prod-apse2:prod-euw1
     sudo: true

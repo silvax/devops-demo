@@ -1,0 +1,9 @@
+/var/log/gatekeeper.log {
+    rotate 3
+    daily
+    missingok
+    notifempty
+    sharedscripts
+    copytruncate
+    compress
+}

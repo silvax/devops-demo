@@ -7,3 +7,4 @@ newrelic_suffix: (Development)
 sumologicaccessid: suKXEnfW9MFxYf
 sumologicaccesskey: AURJxd2HTLMLP51zIlAqfwmVafcARLkmeN9CWbtpOH6xEpqJGSV3S9EQgxvYlrob
 servicediscoveryurl: http://service-discovery.infrastructure.inintca.com/dev/service.discovery.properties
+gatekeeper_arn: arn:aws:iam::607886752321:role/gatekeeper
