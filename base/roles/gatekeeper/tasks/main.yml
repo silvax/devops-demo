@@ -16,6 +16,9 @@
 - name: copy the ansible playbook that updates the users
   copy: src=ssh_create_users.yml dest=/opt/gatekeeper/ssh_create_users.yml
 
+- name: copy the ansible.cfg file
+  copy: src=ansible.cfg dest=/opt/gatekeeper/ansible.cfg
+
 - name: copy the python script that retrieves data from dynamodb
   copy: src=ssh_dynamodb.py dest=/opt/gatekeeper/ssh_dynamodb.py mode=0755
 
@@ -23,7 +26,13 @@
   template: src=update_ssh_users.sh dest=/opt/gatekeeper/update_ssh_users.sh mode=0755
 
 - name: create entry to run cron job that adds and remove users
-  cron: name="update ssh users" minute="*/{{ ['1', '2', '3', '4', '5', '6', '7', '8', '9'] |random}}" hour="*" cron_file=gatekeeper user=root job="/opt/gatekeeper/update_ssh_users.sh >> /var/log/gatekeeper.log 2>&1"
+  cron: name="update ssh users" minute="{{ 10 |random(1,1)}}-59/10" hour="*" cron_file=gatekeeper user=root job="/opt/gatekeeper/update_ssh_users.sh >> /var/log/gatekeeper.log 2>&1"
+
+- name: create entry to run cron job that adds and remove users at boot for opsworks
+  cron: name="update ssh users at boot" special_time=reboot cron_file=gatekeeper user=root job="/opt/gatekeeper/update_ssh_users.sh >> /var/log/gatekeeper.log 2>&1"
+
+- name: run the ssh update users the first time.
+  shell: /opt/gatekeeper/update_ssh_users.sh >> /var/log/gatekeeper.log 2>&1
 
 - name: copy the logrotate file
   copy: src=gatekeeperlog dest=/etc/logrotate.d/gatekeeperlog
