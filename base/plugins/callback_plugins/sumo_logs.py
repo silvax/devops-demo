@@ -11,16 +11,16 @@ log = logging.getLogger("inin")
 fh = logging.FileHandler('/home/ec2-user/ansible-json.log')
 log.addHandler(fh)
 
-
 def json_log(res, play, role, task, state):
     if type(res) == type(dict()):
-        if 'verbose_override' not in res:
+        if 'verbose_override' in res or res.has_key('sensitive'): 
+            log.info(json.dumps({"play":play,"role":role,"task":task,"state":state}, sort_keys=True))
+        else:
             res.update({"play":play})
             res.update({"role":role})
             res.update({"task":task})
             res.update({"state": state})
             log.info(json.dumps(res, sort_keys=True))
-
 
 class CallbackModule(object):
 
@@ -37,8 +37,6 @@ class CallbackModule(object):
         if task:
             self.task_name = task.name
             self.role_name = task.role_name
-            print "play = %s, role= %s, task= %s, args = %s, kwargs = %s" % (self.playbook.filename, task.role_name,task.name,args,kwargs)
-
 
     def runner_on_failed(self, host, res, ignore_errors=False):
         json_log(res, self.play_name, self.role_name, self.task_name,'failed')
