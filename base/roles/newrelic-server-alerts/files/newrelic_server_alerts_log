@@ -1,0 +1,9 @@
+/var/log/newrelic_server_alerts.log {
+    rotate 3
+    daily
+    missingok
+    notifempty
+    sharedscripts
+    copytruncate
+    compress
+}

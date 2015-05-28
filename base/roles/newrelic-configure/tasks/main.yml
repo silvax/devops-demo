@@ -1,29 +1,10 @@
 ---
 # tasks file for new relic
 
-- name: gather ec2 facts
-  action: ec2_facts
-
-- name: get environment tag
-  action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
-  register: allTags
-
-# This role name will be used as the application name in the various New Relic config files
-# and as the Role label on the servers:
 - name: Set newrelic app name for non-opsworks
   set_fact:
-    newrelic_role: "{{ allTags.tags.role }}"
+    newrelic_role: "{{ service_role }}"
   when: opsworks is undefined or opsworks.stack.name is none
-
-- name: Strip region name out of opsworks stack name
-  set_fact:
-    newrelic_opsworks_stack: "{{ opsworks.stack.name | replace(ansible_ec2_placement_region, '') }}"
-  when: opsworks is defined and opsworks.stack.name is not none
-
-- name: Set newrelic app name for opsworks (strip out double dashes that may have come from the stack name)
-  set_fact:
-    newrelic_role: "{{ '%s-%s'|format(newrelic_opsworks_stack, allTags.tags.role) | replace('--', '-') }}"
-  when: opsworks is defined and opsworks.stack.name is not none
 
 #template nrsysmond.cfg file
 - template: src=nrsysmond.cfg.j2 dest=/etc/newrelic/nrsysmond.cfg owner=root group=root mode=0644
