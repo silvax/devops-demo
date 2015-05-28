@@ -9,7 +9,7 @@
 # Otherwise the server alert policy name can be passed explicitly:
 # - { role: newrelic-server-alerts, newrelic_server_alert_policy: "my_policy_name" }
 
-- name: create the gatekeeper directory
+- name: create newrelic_server_alerts directory
   file: name=/opt/newrelic_server_alerts state=directory
 
 - name: copy server alerts script to /opt/newrelic_server_alerts
