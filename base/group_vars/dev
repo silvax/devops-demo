@@ -3,6 +3,7 @@
 newrelic_loglevel: info
 newrelic_logfile: /var/log/newrelic/nrsysmond.log
 newrelic_license_key: e8670fd21ef24957edc4d88fbf22574753a31c2a
+newrelic_api_key: 0966a142ed124617863e888e7942f80f0e6e17b63a31c2a
 newrelic_suffix: (Development)
 sumologicaccessid: suKXEnfW9MFxYf
 sumologicaccesskey: AURJxd2HTLMLP51zIlAqfwmVafcARLkmeN9CWbtpOH6xEpqJGSV3S9EQgxvYlrob
