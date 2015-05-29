@@ -1,10 +1,9 @@
 ---
 # tasks file for new relic
 
-- name: Set newrelic app name for non-opsworks
+- name: Set newrelic app name
   set_fact:
     newrelic_role: "{{ service_role }}"
-  when: opsworks is undefined or opsworks.stack.name is none
 
 #template nrsysmond.cfg file
 - template: src=nrsysmond.cfg.j2 dest=/etc/newrelic/nrsysmond.cfg owner=root group=root mode=0644
