@@ -8,9 +8,12 @@
 #template nrsysmond.cfg file
 - template: src=nrsysmond.cfg.j2 dest=/etc/newrelic/nrsysmond.cfg owner=root group=root mode=0644
 - template: src=newrelic.ini.j2 dest=/etc/newrelic/newrelic.ini owner=root group=root mode=0644
+- template: src=api_key.j2 dest=/etc/newrelic/api_key owner=root group=root mode=0600
+
 
 - name: Ensure /var/log/newrelic is owned by newrelic
   file: path=/var/log/newrelic state=directory owner=newrelic group=newrelic mode=0755
 
 - name: Enable New Relic Server Agent service
   service: name=newrelic-sysmond enabled=yes state=started
+
