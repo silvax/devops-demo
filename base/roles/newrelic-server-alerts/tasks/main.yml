@@ -9,6 +9,9 @@
 # Otherwise the server alert policy name can be passed explicitly:
 # - { role: newrelic-server-alerts, newrelic_server_alert_policy: "my_policy_name" }
 
+# /etc/newrelic/api_key.yml is written out by newrelic-configure
+- include_vars: /etc/newrelic/api_key.yml
+
 - name: create newrelic_server_alerts directory
   file: name=/opt/newrelic_server_alerts state=directory
 
