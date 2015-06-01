@@ -4,6 +4,10 @@
 - name: gather ec2 facts
   action: ec2_facts
 
+- name: get environment tag
+  action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
+  register: allTags
+
 - name: add admin user group to the instance
   group: name=admins state=present
 
