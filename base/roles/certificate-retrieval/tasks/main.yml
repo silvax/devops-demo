@@ -18,14 +18,21 @@
 #      - Boolean used if server only requires .crt file without .key file.  Default: True
 #
 
+- name: gather ec2 facts
+  action: ec2_facts
+
+- name: get environment tag
+  action: ec2_tag resource={{ ansible_ec2_instance_id }} region={{ ansible_ec2_placement_region }} state=list
+  register: allTags
+
 - name: Create cert directory if it doesn't exist
   file: path={{ cert_directory }} state=directory
 
 - name: Fetch public certificate file
-  kms_decrypt: src=s3://{{ kms_bucket }}/ansible/certs/{{ domain }}.crt dest={{ cert_directory }}/{{ dest_name | default(domain) }}.crt owner={{ cert_owner }} mode={{ cert_mode }}
+  kms_decrypt: src=s3://{{ kms_bucket }}/certs/{{ allTags.tags.environment }}/{{ domain }}.crt dest={{ cert_directory }}/{{ dest_name | default(domain) }}.crt owner={{ cert_owner }} mode={{ cert_mode }}
   register: cert_file
 
 - name: Fetch private key file
-  kms_decrypt: src=s3://{{ kms_bucket }}/ansible/certs/{{ domain }}.key dest={{ cert_directory }}/{{ dest_name | default(domain) }}.key owner={{ cert_owner }} mode={{ cert_mode }}
+  kms_decrypt: src=s3://{{ kms_bucket }}/certs/{{ allTags.tags.environment }}/{{ domain }}.key dest={{ cert_directory }}/{{ dest_name | default(domain) }}.key owner={{ cert_owner }} mode={{ cert_mode }}
   register: key_file
   when: include_key_file == true
