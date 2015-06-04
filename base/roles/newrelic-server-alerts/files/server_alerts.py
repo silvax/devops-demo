@@ -17,6 +17,20 @@ def get(path, api_key, params=None):
     result.raise_for_status()
     return result.json()
 
+def get_paged(path, api_key, key, params=None):
+    result = []
+    page = 1
+    while True:
+        params["page"] = page
+        page += 1
+        value = get(path, api_key, params=params)[key]
+        if len(value) == 0:
+            return result
+        else:
+            result.extend(value)
+
+
+
 def put(path, api_key, data=None):
     result = requests.put(make_api_uri(path), headers=make_headers(api_key), data=data)
     result.raise_for_status()
@@ -51,8 +65,8 @@ def main():
     if policy_name is None:
         policy_name = role
 
-    result = get('servers.json', api_key, {'filter[labels]':'Role:%s'%role})
-    active = [x['id'] for x in result['servers'] if is_active(x)]
+    result = get_paged('servers.json', api_key, 'servers', {'filter[labels]':'Role:%s'%role})
+    active = [x['id'] for x in result if is_active(x)]
 
     policy = get_server_policy(api_key, policy_name)
 
