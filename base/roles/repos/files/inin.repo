@@ -27,13 +27,6 @@ releasever=latest
 # PUT YOUR REPOS HERE OR IN separate files named file.repo
 # in /etc/yum.repos.d
 
-[inin_epel]
-gpgcheck=0
-name=InIn epel amzn x86_64
-baseurl=http://repo.infrastructure.inintca.com/inin_epel/6/x86_64
-includepkgs=daemonize*,rabbitmq*,erlang*,python*,django*,SOAPpy,cppunit*,zeromq*,js*,libcurl*,curl*,openpgm*
-priority=10
-
 [inin_dev]
 name=InIn dev amzn x86_64
 baseurl=http://inin-developer:crjfHtEn@purecloud.artifactoryonline.com/purecloud/inin-yum-dev
@@ -47,8 +40,3 @@ autorefresh=1
 type=rpm-md
 username=inin-developer
 password=crjfHtEn
-
-
-
-
-
