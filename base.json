@@ -50,16 +50,14 @@
           "volume_type": "standard",
           "volume_size":  10,
           "snapshot_id": "snap-77778d06",
-          "delete_on_termination": true,
-          "encrypted": true
+          "delete_on_termination": true
       },
       {
           "device_name": "/dev/sdp",
           "volume_type": "standard",
           "volume_size":  10,
           "snapshot_id": "snap-77778d06",
-          "delete_on_termination": true,
-          "encrypted": true
+          "delete_on_termination": true
       }
     ]
   }],
