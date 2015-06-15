@@ -58,12 +58,6 @@
      - { role: spot-termination-notifier, when: spot_instance.stdout != "None" }
      - gatekeeper
 
-  - hosts: stage:prod:prod-apse2:prod-euw1
-    sudo: true
-
-    roles:
-      - jumpcloud-configure
-
   - hosts: test:stage:prod:prod-apse2:prod-euw1
     sudo: true
 
