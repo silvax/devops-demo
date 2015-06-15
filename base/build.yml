@@ -16,7 +16,6 @@
     - newrelicjava
     - sumologic
     - supervisor
-    - jumpcloud-install
     - ossec-install
     - alertlogic-install
 
