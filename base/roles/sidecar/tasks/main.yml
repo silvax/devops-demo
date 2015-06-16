@@ -4,7 +4,7 @@
     s3: bucket=inindca-deploy object=/python/latest/sidecar.tar.gz dest=/tmp/sidecar.tar.gz mode=get
 
   - name: pip install the downloaded sidecar package
-    pip: name='file:///tmp/sidecar.tar.gz'
+    pip: name='file:///tmp/sidecar.tar.gz' executable=pip-2.7
 
   - name: start sidecar service with default config
     service: name=sidecard state=started enabled=yes
