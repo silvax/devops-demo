@@ -38,12 +38,12 @@ Vagrant.configure("2") do |config|
       {
         'DeviceName' => '/dev/sdo',
         'Ebs.VolumeSize' => 10,
-        'Ebs.SnapshotId' => 'snap-a3e2ea1d'
+        'Ebs.SnapshotId' => 'snap-86ece438'
       },
       {
         'DeviceName' => '/dev/sdp',
         'Ebs.VolumeSize' => 10,
-        'Ebs.SnapshotId' => 'snap-a3e2ea1d'
+        'Ebs.SnapshotId' => 'snap-86ece438'
       }
     ]
     aws.ssh_host_attribute = :private_ip_address
