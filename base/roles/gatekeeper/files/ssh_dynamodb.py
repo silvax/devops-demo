@@ -13,7 +13,7 @@ dest_role = "arn:aws:iam::607886752321:role/gatekeeper"
 # Parse command line arguments
 parser = argparse.ArgumentParser(description='Process command line arguments')
 parser.add_argument('-t', '--table', dest='table', action="store", default='ssh-user', required=True, help='Enter the name of the DynamoDB tables where data is stored. Default is ssh_users')
-parser.add_argument('-r', '--region', dest='region', action="store", default='us-east-1', required=True, help='Enter the AWS region where the DynamoDB table is stored. Default is us-east-1')
+parser.add_argument('-r', '--region', dest='region', action="store", required=True, help='Enter the AWS region where the DynamoDB table is stored. Default is us-east-1')
 parser.add_argument('-f', '--file', dest='file', action="store",required=True, help='enter the name of the yaml file where the data will be stored. Default is users.yml')
 parser.add_argument('-s', '--stsrole', dest='stsrole', action="store", required=False, help='enter the arn of the role that will be assumed on the target account for dynamodb accessl')
 
