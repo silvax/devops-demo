@@ -1,0 +1,25 @@
+---
+  - hosts: all
+    sudo: true
+
+    tasks:
+    - name: gather ec2 facts
+      action: ec2_facts
+
+    - name: install packages
+      yum: name=httpd state=present
+
+    - name: install something else
+      yum: name=php state=present
+
+    - name: enable apache on startup and start service
+      service: name=httpd enabled=yes state=started
+
+    - name: download my app
+      s3: bucket=andress-web object=index.html dest=/var/www/html/index.html mode=get
+
+    - name: update version on the file
+      lineinfile: dest=/var/www/html/index.html state=present regexp=Version line="<h3 id="toc_1">Version {{ appversion }}</h3>"
+
+    - name: print public ip address
+      action: debug var=ansible_ec2_public_hostname

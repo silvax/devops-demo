@@ -1,4 +1,0 @@
----
-
-  - name: copy default service discovery file
-    template: src=inin.conf dest=/etc/inin.conf mode=0755

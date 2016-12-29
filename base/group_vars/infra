@@ -1,9 +1,0 @@
----
-# This file sets up per environment values for variables
-newrelic_loglevel: info
-newrelic_logfile: /var/log/newrelic/nrsysmond.log
-newrelic_license_key: 74390048dbb46336a59b1838a0eae1ff8da7073d
-newrelic_suffix: (Infra)
-sumologicaccessid: suKXEnfW9MFxYf
-sumologicaccesskey: AURJxd2HTLMLP51zIlAqfwmVafcARLkmeN9CWbtpOH6xEpqJGSV3S9EQgxvYlrob
-servicediscoveryurl: http://service-discovery.infrastructure.inintca.com/infra/service.discovery.properties

@@ -1,7 +1,0 @@
----
-
-  - name: add the file system to fstab log for ebs instances
-    mount: name=/var/log src=/dev/xvdo fstype=ext4 state=present
-
-  - name: add the file system to fstab tmp for ebs instances
-    mount: name=/tmp src=/dev/xvdp fstype=ext4 state=present

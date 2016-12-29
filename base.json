@@ -1,70 +1,36 @@
 {
   "variables": {
-    "sourceami"           : "ami-1ecae776",
-    "role"                : "base",
-    "instance_type"       : "m3.medium",
-    "source_repo"         : "{{ env `GIT_URL` }}",
-    "source_commit_hash"  : "{{ env `GIT_COMMIT` }}",
-    "build"               : "{{ env `JOB_NAME` }}",
-    "build_number"        : "{{ env `BUILD_NUMBER` }}",
-    "build_url"           : "{{ env `BUILD_URL` }}"
+    "sourceami": "ami-256c1d32",
+    "role": "webserver",
+    "appversion": "1.0.3"
   },
-  "builders": [{
-    "type": "amazon-ebs",
-    "region": "us-east-1",
-    "source_ami": "{{user `sourceami`}}",
-    "instance_type": "m3.medium",
-    "ssh_username": "ec2-user",
-    "ami_name" : "{{user `role`}}-ebs {{isotime | clean_ami_name}}",
-    "ssh_timeout": "5m",
-    "iam_instance_profile": "default",
-    "enhanced_networking": true,
-    "vpc_id": "vpc-ba514bd8",
-    "subnet_id": "subnet-21e7b967",
-    "security_group_id": "sg-cf66d3aa",
-    "ssh_private_ip": true,
-    "associate_public_ip_address": true,
-    "run_tags": {
-      "Name"               : "{{ user `role` }}-packer",
-      "role"               : "{{ user `role` }}-packer"
-    },
-    "tags": {
-      "Name"               : "{{ user `role` }}",
-      "role"               : "{{ user `role` }}",
-      "owner"              : "devops-cloudapplications@inin.com",
-      "source_ami"         : "{{ user `sourceami` }}",
-      "source_repo"        : "{{ user `source_repo` }}",
-      "source_commit_hash" : "{{ user `source_commit_hash` }}",
-      "build"              : "{{ user `build` }}",
-      "build_number"       : "{{ user `build_number` }}",
-      "build_url"          : "{{ user `build_url` }}"
-    },
-    "run_tags": {
-      "Name": "base-packer",
-      "role": "base-packer",
-      "builder": "base-packer"
-    },
-    "ami_block_device_mappings": [
-      {
-          "device_name": "/dev/sdo",
-          "volume_type": "standard",
-          "volume_size":  10,
-          "snapshot_id": "snap-4d939632",
-          "delete_on_termination": true
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "us-east-1",
+      "source_ami": "{{user `sourceami`}}",
+      "instance_type": "m4.large",
+      "ssh_username": "ec2-user",
+      "ami_name": "{{user `role`}}-ebs {{isotime | clean_ami_name}}",
+      "ssh_timeout": "5m",
+      "iam_instance_profile": "vagrant",
+      "enhanced_networking": true,
+      "vpc_id": "vpc-4a5b512f",
+      "subnet_id": "subnet-6285e349",
+      "security_group_id": "sg-7c3a7c1b",
+      "associate_public_ip_address": true,
+      "run_tags": {
+        "Name": "web-server-packer"
       },
-      {
-          "device_name": "/dev/sdp",
-          "volume_type": "standard",
-          "volume_size":  10,
-          "snapshot_id": "snap-4d939632",
-          "delete_on_termination": true
+      "tags": {
+        "Name": "webserver"
       }
-    ]
-  }],
+    }
+  ],
   "provisioners": [
     {
       "type": "file",
-      "source": "./base",
+      "source": "./setup",
       "destination": "/home/ec2-user"
     },
     {
@@ -73,9 +39,9 @@
     },
     {
       "type": "ansible-local",
-      "playbook_file": "base/build.yml",
-      "playbook_dir": "base"
+      "playbook_file": "setup/site.yml",
+      "playbook_dir": "setup",
+      "extra_arguments": ["--extra-vars \"appversion={{user `appversion`}}\""]
     }
   ]
-
 }

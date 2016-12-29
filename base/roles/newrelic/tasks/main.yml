@@ -1,9 +1,0 @@
----
-# tasks file for new relic
-- name: Install New Relic Sysmond
-  yum:
-    name: newrelic-sysmond
-    state: latest
-
-- name: disable New Relic Server Agent service
-  service: name=newrelic-sysmond enabled=no

@@ -1,3 +1,0 @@
----
-# defaults file for gatekeeper
-gatekeeper_arn: arn:aws:iam::607886752321:role/gatekeeper

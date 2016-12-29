@@ -1,8 +1,0 @@
----
-# Check if tagbase.sh exists
-  - stat: path=/opt/tagbase.sh
-    register: st
-
-# If it exists, then run tagbase.sh to add all the standard tags to the instance
-  - shell: /opt/tagbase.sh >> /var/log/tagbase.log
-    when: st.stat.exists

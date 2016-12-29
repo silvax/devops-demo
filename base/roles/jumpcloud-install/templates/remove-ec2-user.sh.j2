@@ -1,3 +1,0 @@
-#!/bin/bash
-
-find /etc/ -maxdepth 1 -name 'passwd' -o -name 'group' -o -name 'shadow' | xargs sed -i 's/^ec2-user/devops/g'

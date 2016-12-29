@@ -1,8 +1,0 @@
----
-log_vol_size: 10G
-tmp_vol_size: 10G
-data_vol_size: 100G
-pvs_list:
-  - /dev/xvdb
-  - /dev/xvdc
-number_of_volumes: 2
