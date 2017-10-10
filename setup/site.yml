@@ -3,8 +3,5 @@
     sudo: true
 
     tasks:
-    - name: gather ec2 facts
-      action: ec2_facts
-
-    - name: print public ip address
-      action: debug var=ansible_ec2_public_hostname
+    - debug:
+      msg: "Hello this is a test"
