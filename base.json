@@ -1,6 +1,6 @@
 {
   "variables": {
-    "sourceami": "ami-256c1d32",
+    "sourceami": "ami-0b69ea66ff7391e80",
     "role": "webserver",
     "appversion": "1.0.3"
   },
